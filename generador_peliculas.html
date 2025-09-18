@@ -5,355 +5,349 @@
 <title>Generador JSON - King Play</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <style>
-/* (estilos exactamente como los tenías) */
+/* Estilos corregidos sin caracteres en chino */
 body {
-background: #121212;
-color: white;
-font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-padding: 20px;
-line-height: 1.6;
+  background: #121212;
+  color: white;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 20px;
+  line-height: 1.6;
 }
 h1, h2 {
-text-align: center;
-color: #00bfff;
-margin-bottom: 20px;
+  text-align: center;
+  color: #00bfff;
+  margin-bottom: 20px;
 }
 h1 {
-font-size: 2.2rem;
-margin-bottom: 30px;
-text-shadow: 0 2px 4px rgba(0, 191, 255, 0.3);
+  font-size: 2.2rem;
+  margin-bottom: 30px;
+  text-shadow: 0 2px 4px rgba(0, 191, 255, 0.3);
 }
 label {
-display: block;
-margin: 15px auto 5px;
-width: 90%;
-max-width: 600px;
-font-weight: bold;
+  display: block;
+  margin: 15px auto 5px;
+  width: 90%;
+  max-width: 600px;
+  font-weight: bold;
 }
 input, select, textarea, button {
-display: block;
-margin: 5px auto 15px;
-width: 90%;
-max-width: 600px;
-padding: 12px;
-border-radius: 8px;
-font-size: 1rem;
-box-sizing: border-box;
+  display: block;
+  margin: 5px auto 15px;
+  width: 90%;
+  max-width: 600px;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 1rem;
+  box-sizing: border-box;
 }
 input, select, textarea {
-background: #2a2a2a;
-color: white;
-border: 1px solid #444;
+  background: #2a2a2a;
+  color: white;
+  border: 1px solid #444;
 }
 input:focus, select:focus, textarea:focus {
-outline: none;
-border-color: #00bfff;
-box-shadow: 0 0 0 2px rgba(0, 191, 255, 0.3);
+  outline: none;
+  border-color: #00bfff;
+  box-shadow: 0 0 0 2px rgba(0, 191, 255, 0.3);
 }
 textarea {
-resize: vertical;
-min-height: 100px;
+  resize: vertical;
+  min-height: 100px;
 }
 button {
-background: linear-gradient(to bottom, #00bfff, #0088cc);
-color: white;
-border: none;
-font-weight: bold;
-cursor: pointer;
-transition: all 0.3s ease;
-padding: 12px 20px;
+  background: linear-gradient(to bottom, #00bfff, #0088cc);
+  color: white;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 12px 20px;
 }
 button:hover {
-background: linear-gradient(to bottom, #00a5e0, #0077b3);
-transform: translateY(-2px);
-box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(to bottom, #00a5e0, #0077b3);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 button:active {
-transform: translateY(0);
+  transform: translateY(0);
 }
 table {
-width: 90%;
-max-width: 900px;
-margin: 20px auto;
-border-collapse: collapse;
-background: #1f1f1f;
-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  width: 90%;
+  max-width: 900px;
+  margin: 20px auto;
+  border-collapse: collapse;
+  background: #1f1f1f;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
 }
 td, th {
-padding: 10px 15px;
-font-size: 0.9rem;
-border-bottom: 1px solid #333;
-text-align: left;
-vertical-align: middle;
+  padding: 10px 15px;
+  font-size: 0.9rem;
+  border-bottom: 1px solid #333;
+  text-align: left;
+  vertical-align: middle;
 }
 th {
-background: linear-gradient(to bottom, #00bfff, #0088cc);
-color: #fff;
-font-size: 0.95rem;
-padding: 12px 15px;
+  background: linear-gradient(to bottom, #00bfff, #0088cc);
+  color: #fff;
+  font-size: 0.95rem;
+  padding: 12px 15px;
 }
 tr:nth-child(even) {
-background-color: #1a1a1a;
+  background-color: #1a1a1a;
 }
 tr:hover {
-background-color: #2a2a2a;
+  background-color: #2a2a2a;
 }
 hr {
-margin: 40px auto;
-width: 90%;
-border: 0;
-height: 1px;
-background: linear-gradient(to right, transparent, #00bfff, transparent);
+  margin: 40px auto;
+  width: 90%;
+  border: 0;
+  height: 1px;
+  background: linear-gradient(to right, transparent, #00bfff, transparent);
 }
 #temporadasLista {
-width: 90%;
-max-width: 600px;
-margin: 10px auto;
-padding: 15px;
-background: #1e1e1e;
-border-radius: 8px;
+  width: 90%;
+  max-width: 600px;
+  margin: 10px auto;
+  padding: 15px;
+  background: #1e1e1e;
+  border-radius: 8px;
 }
 .temporada-item {
-margin-bottom: 15px;
-padding: 15px;
-border: 1px solid #00bfff;
-border-radius: 8px;
-background: #252525;
-position: relative;
+  margin-bottom: 15px;
+  padding: 15px;
+  border: 1px solid #00bfff;
+  border-radius: 8px;
+  background: #252525;
+  position: relative;
 }
 .temporada-url {
-overflow: hidden;
-text-overflow: ellipsis;
-white-space: nowrap;
-max-width: 100%;
-display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+  display: inline-block;
 }
 .temporada-editable {
-display: none;
+  display: none;
 }
 .temporada-view {
-display: block;
+  display: block;
 }
 .search-container {
-display: flex;
-justify-content: center;
-margin: 20px 0;
-gap: 10px;
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+  gap: 10px;
 }
 .search-container input {
-display: inline-block;
-width: 70%;
-margin: 0;
-border-radius: 8px 0 0 8px;
+  display: inline-block;
+  width: 70%;
+  margin: 0;
+  border-radius: 8px 0 0 8px;
 }
 .search-container button {
-display: inline-block;
-width: 28%;
-margin: 0;
-border-radius: 0 8px 8px 0;
+  display: inline-block;
+  width: 28%;
+  margin: 0;
+  border-radius: 0 8px 8px 0;
 }
 .highlight {
-background-color: #2a2a5d !important;
-border: 2px solid #00bfff;
-animation: pulse 极速赛车开奖结果
-2s infinite;
+  background-color: #2a2a5d !important;
+  border: 2px solid #00bfff;
+  animation: pulse 2s infinite;
 }
 @keyframes pulse {
-0% { box-shadow: 0 0 0 0 rgba(0, 191, 255, 0.5); }
-70% { box-shadow: 0 0 0 10px rgba(0, 191, 255, 0); }
-100% { box-shadow: 0 极速赛车开奖结果
-0 0 rgba(0, 191, 255, 0); }
+  0% { box-shadow: 0 0 0 0 rgba(0, 191, 255, 0.5); }
+  70% { box-shadow: 0 0 0 10px rgba(0, 191, 255, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(0, 191, 255, 0); }
 }
 .form-section {
-border: 2px solid #333;
-border-radius: 10px;
-padding: 20px;
-margin-bottom: 25px;
-background: #1e1e1e;
-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  border: 2px solid #333;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 25px;
+  background: #1e1e1e;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 .form-title {
-text-align: center;
-color: #00bfff;
-margin-top: 0;
-font-size: 1.5rem;
+  text-align: center;
+  color: #00bfff;
+  margin-top: 0;
+  font-size: 1.5rem;
 }
 .encryption-section {
-border: 2px solid 
-00bfff;
-border-radius: 10px;
-padding: 20px;
-margin: 25px auto;
-background: #1e1e1e;
-max-width: 600px;
-box-shadow: 0 4px 15px rgba(0, 191, 255, 0.2);
+  border: 2px solid #00bfff;
+  border-radius: 10px;
+  padding: 20px;
+  margin: 25px auto;
+  background: #1e1e1e;
+  max-width: 600px;
+  box-shadow: 0 4px 15px rgba(0, 191, 255, 0.2);
 }
 .copy-btn-container {
-display: flex;
-justify-content: center;
-margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
 }
 .copy-btn {
-width: auto;
-padding: 8px 20px;
-font-size: 0.9rem;
+  width: auto;
+  padding: 8px 20px;
+  font-size: 0.9rem;
 }
 .action-buttons {
-display: flex;
-justify-content: center;
-gap: 10px;
-margin: 15px 0;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 15px 0;
 }
 .action-buttons button {
-width: auto;
-padding: 8px 15px;
+  width: auto;
+  padding: 8px 15px;
 }
 .notification {
-position: fixed;
-top: 20px;
-right: 20px;
-padding: 15px 25px;
-background: #00bfff;
-color: white;
-border-radius: 5px;
-box-shadow: 0 4px 极速赛车开奖结果
-12px rgba(0, 0, 0, 0.3);
-transform: translateX(100%);
-transition: transform 0.3s ease;
-z-index: 1000;
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 15px 25px;
+  background: #00bfff;
+  color: white;
+  border-radius: 5px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+  z-index: 1000;
 }
 .notification.show {
-transform: translateX(0);
+  transform: translateX(0);
 }
 .serie-anime-fields {
-display: none;
+  display: none;
 }
 .action-btn {
-width: 28px;
-height: 28px;
-display: flex;
-align-items: center;
-justify-content: center;
-border: none;
-border-radius: 4px;
-cursor: pointer;
-font-size: 14px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
 }
 .action-btn:hover {
-opacity: 0.9;
+  opacity: 0.9;
 }
 .btn-move-up {
-background: #4CAF50;
+  background: #4CAF50;
 }
 .btn-move-down {
-background: #2196F3;
+  background: #2196F3;
 }
 .btn-edit {
-background: #FF9800;
+  background: #FF9800;
 }
 .btn-delete {
-background: #F44336;
+  background: #F44336;
 }
 .edit-temporada-btn {
-background: #FF9800;
-color: white;
-border: none;
-padding: 5px 10px;
-border-radius: 4px;
-cursor: pointer;
-margin-left: 10px;
+  background: #FF9800;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: 10px;
 }
 .category-header {
-background: linear-gradient(to bottom, #333, #222) !important;
-font-size: 1.1rem !important;
-padding: 15px !important;
-cursor: pointer;
+  background: linear-gradient(to bottom, #333, #222) !important;
+  font-size: 1.1rem !important;
+  padding: 15px !important;
+  cursor: pointer;
 }
 .category-header:hover {
-background: linear-gradient(to bottom, #444, #333) !important;
+  background: linear-gradient(to bottom, #444, #333) !important;
 }
 .category-content {
-display: table-row-group;
+  display: table-row-group;
 }
 .content-row {
-display: table-row;
+  display: table-row;
 }
 .content-cell {
-display: table-cell;
-padding: 10px 15px;
-vertical-align: middle;
+  display: table-cell;
+  padding: 10px 15px;
+  vertical-align: middle;
 }
 .content-info {
-display: flex;
-flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 .content-title {
-font-weight: bold;
-margin-bottom: 4px;
+  font-weight: bold;
+  margin-bottom: 4px;
 }
 .content-type {
-font-style: italic;
-color: #aaa;
-margin-bottom: 8px;
+  font-style: italic;
+  color: #aaa;
+  margin-bottom: 8px;
 }
 .content-id {
-font-size: 0.85rem;
-极速赛车开奖结果
-color: #888;
-margin-bottom: 8px;
+  font-size: 0.85rem;
+  color: #888;
+  margin-bottom: 8px;
 }
 .content-actions {
-display: flex;
-gap: 6px;
-justify-content: flex-start;
+  display: flex;
+  gap: 6px;
+  justify-content: flex-start;
 }
 .compact-view {
-极速赛车开奖结果
-display: flex;
-flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 .compact-view .title-line {
-display: flex;
-justify-content: space-between;
-align-items: center;
-margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
 }
 .compact-view .actions-line {
-display: flex;
-gap: 6px;
+  display: flex;
+  gap: 6px;
 }
 .github-section {
-border: 2px solid #6e5494; /* Color de GitHub */
-border-radius: 10px;
-padding: 20px;
-margin: 25px auto;
-background: #1e1e1e;
-max-width: 600px;
-box-shadow: 0 4px 15px rgba(110, 84, 148, 0.2);
+  border: 2px solid #6e5494;
+  border-radius: 10px;
+  padding: 20px;
+  margin: 25px auto;
+  background: #1e1e1e;
+  max-width: 600px;
+  box-shadow: 0 4px 15px rgba(110, 84, 148, 0.2);
 }
 .github-fields {
-display: none;
+  display: none;
 }
 @media (max-width: 768px) {
-.search-container {
-flex-direction: column;
-align-items: center;
-}
-.search-container input,
-.search-container button {
-width: 90%;
-border-radius: 8px;
-}
-.action-buttons {
-flex-wrap: wrap;
-}
-.content-actions {
-flex-wrap: wrap;
-}
-.compact-view .title-line {
-flex-direction: column;
-align-items: flex-start;
-}
+  .search-container {
+    flex-direction: column;
+    align-items: center;
+  }
+  .search-container input,
+  .search-container button {
+    width: 90%;
+    border-radius: 8px;
+  }
+  .action-buttons {
+    flex-wrap: wrap;
+  }
+  .content-actions {
+    flex-wrap: wrap;
+  }
+  .compact-view .title-line {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
 </style>
 </head>
@@ -362,153 +356,146 @@ align-items: flex-start;
 <h1>Generador JSON - King Play</h1>
 
 <div class="form-section">
-<h2 class="form-title">Formulario de Contenido</h2>
+  <h2 class="form-title">Formulario de Contenido</h2>
 
-<label>Tipo:</label>
-<select id="tipo" onchange="alternarCampos()">
-<option value="Pelicula">Película</option>
-<option value="Serie">Serie</option>
-<option value="Anime">
-Anime</option>
-<option value="Tv">Tv</option>
-</select>
+  <label>Tipo:</label>
+  <select id="tipo" onchange="alternarCampos()">
+    <option value="Pelicula">Película</option>
+    <option value="Serie">Serie</option>
+    <option value="Anime">Anime</option>
+    <option value="Tv">Tv</option>
+  </select>
 
-<label>Título:</label>
-<input type="text" id="titulo" />
+  <label>Título:</label>
+  <input type="text" id="titulo" />
 
-<label>Imagen URL:</label>
-<input type="text" id="imagen" />
+  <label>Imagen URL:</label>
+  <input type="text" id="imagen" />
 
-<!-- Campos para Película y TV -->
-<div id="camposPeliculaTv">
-<label>Categoría (separadas por coma):</label>
-<input type="text" id="categoria" />
+  <!-- Campos para Película y TV -->
+  <div id="camposPeliculaTv">
+    <label>Categoría (separadas por coma):</label>
+    <input type="text" id="categoria" />
 
-<label>¿Es estreno?</label>
-<select id="estreno">
-<option value="">No</option>
-<option value="Estreno">Sí</option>
-</select>
-</div>
+    <label>¿Es estreno?</label>
+    <select id="estreno">
+      <option value="">No</option>
+      <option value="Estreno">Sí</option>
+    </select>
+  </div>
 
-<!-- BLOQUE PARA PELÍCULAS -->
-<div id="bloquePelicula" style="display:block">
-<label>URL del video (Película):</label>
-<input type="text" id="urlPelicula" placeholder="https://..." />
-</div>
+  <!-- BLOQUE PARA PELÍCULAS -->
+  <div id="bloquePelicula" style="display:block">
+    <label>URL del video (Película):</label>
+    <input type="text" id="urlPelicula" placeholder="https://..." />
+  </div>
 
-<!-- BLOQUE PARA TV -->
-<div极速赛车开奖结果
- id="bloqueTv" style="display:none">
-<label>URL del canal (TV):</label>
-<input type="text" id="urlTv" placeholder="极速赛车开奖结果
-https://..." />
-</div>
+  <!-- BLOQUE PARA TV -->
+  <div id="bloqueTv" style="display:none">
+    <label>URL del canal (TV):</label>
+    <input type="text" id="urlTv" placeholder="https://..." />
+  </div>
 
-<!-- BLOQUE PARA SERIE Y ANIME -->
-<div id="bloqueSerieAnime" style="display:none" class="serie-anime-fields">
-<label>ID de la serie/anime:</label>
-<input type="text" id="idSerieAnime" />
+  <!-- BLOQUE PARA SERIE Y ANIME -->
+  <div id="bloqueSerieAnime" style="display:none" class="serie-anime-fields">
+    <label>ID de la serie/anime:</label>
+    <input type="text" id="idSerieAnime" />
 
-<label>Temporada:</label>
-<input type="text" id="temporada" />
+    <label>Temporada:</label>
+    <input type="text" id="temporada" />
 
-<label>URL base:</label>
-<input type="text" id="urlBase" placeholder="https://..." />
+    <label>URL base:</label>
+    <input type="text" id="urlBase" placeholder="https://..." />
 
-<label>Total de capítulos:</label>
-<input type="number" id="totalCapitulos" min="1" value="1" />
+    <label>Total de capítulos:</label>
+    <input type="number" id="totalCapitulos" min="1" value="1" />
 
-<button onclick="agregarTemporada()">Agregar Temporada</button>
-<div id="temporadasLista"></div>
-</div>
+    <button onclick="agregarTemporada()">Agregar Temporada</button>
+    <div id="temporadasLista"></div>
+  </div>
 
-<button onclick="agregarContenido()" id="agregarBtn">Agregar al JSON</button>
+  <button onclick="agregarContenido()" id="agregarBtn">Agregar al JSON</button>
 </div>
 
 <div class="search-container">
-<input type="text" id="buscador" placeholder="Buscar contenido por título..." onkeypress="handleSearchKeyPress(event)" />
-<button onclick="buscarContenido()">Buscar</button>
+  <input type="text" id="buscador" placeholder="Buscar contenido por título..." onkeypress="handleSearchKeyPress(event)" />
+  <button onclick="buscarContenido()">Buscar</button>
 </div>
 
 <!-- SECCIÓN DE ENCRIPTACIÓN DEBAJO DEL BUSCADOR -->
 <div class="encryption-section">
-<h2 class="form-title">Configuración JSON</h2>
+  <h2 class="form-title">Configuración JSON</h2>
 
-<label>Versión del JSON:</label>
-<input type="text" id="version" value="1.0.0" />
+  <label>Versión del JSON:</label>
+  <input type="text" id="version" value="1.0.0" />
 
-<label>Mensaje de actualización:</label>
-<input type="text" id="mensaje"极速赛车开奖结果
- value="Hay una nueva versión disponible" />
+  <label>Mensaje de actualización:</label>
+  <input type="text" id="mensaje" value="Hay una nueva versión disponible" />
 
-<label>Clave de encriptación:</label>
-<input type="text" id="clave" value="andymix1986" />
+  <label>Clave de encriptación:</label>
+  <input type="text" id="clave" value="andymix1986" />
 
-<div class="action-buttons">
-<button onclick="generarJSON()">Generar JSON Encriptado</button>
-<button onclick="copiarJSON()" id="copiarBtn">
-Copiar JSON Encriptado</button>
-<button onclick="toggleGithubFields()" id="toggleGithubBtn">Configurar GitHub</button>
-</div>
+  <div class="action-buttons">
+    <button onclick="generarJSON()">Generar JSON Encriptado</button>
+    <button onclick="copiarJSON()" id="copiarBtn">Copiar JSON Encriptado</button>
+    <button onclick="toggleGithubFields()" id="toggleGithubBtn">Configurar GitHub</button>
+  </div>
 
-<label>JSON sin encriptar:</label>
-<textarea id="jsonOutput" rows="5" readonly></textarea>
+  <label>JSON sin encriptar:</label>
+  <textarea id="jsonOutput" rows="5" readonly></textarea>
 
-<label>JSON encriptado:</label>
-<textarea id="jsonEncrypted" rows="3" readonly onclick="this.select()"></textarea>
+  <label>JSON encriptado:</label>
+  <textarea id="jsonEncrypted" rows="3" readonly onclick="this.select()"></textarea>
 </div>
 
 <!-- SECCIÓN DE CONFIGURACIÓN DE GITHUB -->
 <div id="githubSection" class="github-section github-fields">
-<h2 class="form-title">Configuración GitHub</h2>
+  <h2 class="form-title">Configuración GitHub</h2>
 
-<label>Usuario/Organización de GitHub:</label>
-<input type="text" id="githubOwner" placeholder="nombre-usuario" />
+  <label>Usuario/Organización de GitHub:</label>
+  <input type="text" id="githubOwner" placeholder="nombre-usuario" />
 
-<label>Repositorio:</label>
-<input type="text" id="githubRepo" placeholder="nombre-repositorio" />
+  <label>Repositorio:</label>
+  <input type="text" id="githubRepo" placeholder="nombre-repositorio" />
 
-<label>Ruta del archivo:</label>
-<input type="text" id="githubPath" value="data/contenidos.json" />
+  <label>Ruta del archivo:</label>
+  <input type="text" id="githubPath" value="data/contenidos.json" />
 
-<label>Rama:</label>
-<input type="text" id="githubBranch" value="main" />
+  <label>Rama:</label>
+  <input type="text" id="githubBranch" value="main" />
 
-<label>Token de acceso (se ocultará después de usar):</label>
-<input type="password" id="githubToken" placeholder="Token de acceso personal" />
+  <label>Token de acceso (se ocultará después de usar):</label>
+  <input type="password" id="githubToken" placeholder="Token de acceso personal" />
 
-<label>Mensaje极速赛车开奖结果
- de commit:</label>
-<input type="极速赛车开奖结果
-text" id="githubCommitMsg" value="Actualizar contenidos desde Generador JSON" />
+  <label>Mensaje de commit:</label>
+  <input type="text" id="githubCommitMsg" value="Actualizar contenidos desde Generador JSON" />
 
-<div class="action-buttons">
-<button onclick="prepararYEnviarAGithub()" id="enviarGithubBtn">Enviar a GitHub</button>
-<button onclick="ocultarToken()">Ocultar Token</button>
-</div>
+  <div class="action-buttons">
+    <button onclick="prepararYEnviarAGithub()" id="enviarGithubBtn">Enviar a GitHub</button>
+    <button onclick="ocultarToken()">Ocultar Token</button>
+  </div>
 </div>
 
 <table id="tablaContenidos">
-<thead>
-<tr>
-<th>#</th>
-<th>Contenido</th>
-</tr>
-</thead>
-<tbody id="tablaBody"></tbody>
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Contenido</th>
+    </tr>
+  </thead>
+  <tbody id="tablaBody"></tbody>
 </table>
 
 <div class="form-section">
-<h2 class="form-title">🔒 Restaurar JSON Encriptado</h2>
+  <h2 class="form-title">🔒 Restaurar JSON Encriptado</h2>
 
-<label>JSON encriptado a cargar:</label>
-<textarea id="jsonRestoreInput" rows="6" placeholder="Pega aquí el JSON encriptado..."></textarea>
+  <label>JSON encriptado a cargar:</label>
+  <textarea id="jsonRestoreInput" rows="6" placeholder="Pega aquí el JSON encriptado..."></textarea>
 
-<label>Clave para desencriptar:</label>
-<input type="text" id="restoreKey" placeholder="Clave usada para encriptar" />
+  <label>Clave para desencriptar:</label>
+  <input type="text" id="restoreKey" placeholder="Clave usada para encriptar" />
 
-<button onclick="restaurarJSON()">Restaurar contenido</button>
+  <button onclick="restaurarJSON()">Restaurar contenido</button>
 </div>
 
 <div id="notification" class="notification">¡Contenido copiado al portapapeles!</div>
@@ -516,655 +503,631 @@ text" id="githubCommitMsg" value="Actualizar contenidos desde Generador JSON" />
 <script>
 let contenidos = [], temporadas = [], editIndex = -1;
 let currentHighlightedRow = null;
-let editandoTemporadaIndex = -极速赛车开奖结果
-1;
+let editandoTemporadaIndex = -1;
 let categoriasExpandidas = {};
 
 function alternarCampos() {
-const tipo = document.getElementById("tipo").value;
-const esSerieAnime = (tipo === 'Serie' || tipo === 'Anime');
-const esPelicula = (tipo === 'Pelicula');
-const esT极速赛车开奖结果
-v = (tipo === 'Tv');
+  const tipo = document.getElementById("tipo").value;
+  const esSerieAnime = (tipo === 'Serie' || tipo === 'Anime');
+  const esPelicula = (tipo === 'Pelicula');
+  const esTv = (tipo === 'Tv');
 
-// Mostrar/ocultar bloques principales
-document.getElementById("bloquePelicula").style.display = esPelicula ? 'block' : 'none';
-document.getElementById("bloqueTv").style.display = esTv ? 'block' : 'none';
-document.getElementById("bloqueSerieAnime").style.display = esSerieAnime ? 'block' : 'none';
+  // Mostrar/ocultar bloques principales
+  document.getElementById("bloquePelicula").style.display = esPelicula ? 'block' : 'none';
+  document.getElementById("bloqueTv").style.display = esTv ? 'block' : 'none';
+  document.getElementById("bloqueSerieAnime").style.display = esSerieAnime ? 'block' : 'none';
 
-// Mostrar/ocultar campos de categoría y estreno
-document.getElementById("camposPeliculaTv").极速赛车开奖结果
-style.display = esSerieAnime ? 'none' : 'block';
+  // Mostrar/ocultar campos de categoría y estreno
+  document.getElementById("camposPeliculaTv").style.display = esSerieAnime ? 'none' : 'block';
 }
 
 function toggleGithubFields() {
-const githubSection = document.getElementById("githubSection");
-if (githubSection.classList.contains("github-fields")) {
-githubSection.classList.remove("github-fields");
-document.getElementById("toggleGithubBtn").textContent = "Ocultar GitHub";
-} else {
-githubSection.classList.add("github-fields");
-document.getElementById("toggleGithubBtn").textContent = "Configurar GitHub";
-}
+  const githubSection = document.getElementById("githubSection");
+  if (githubSection.classList.contains("github-fields")) {
+    githubSection.classList.remove("github-fields");
+    document.getElementById("toggleGithubBtn").textContent = "Ocultar GitHub";
+  } else {
+    githubSection.classList.add("github-fields");
+    document.getElementById("toggleGithubBtn").textContent = "Configurar GitHub";
+  }
 }
 
 function ocultarToken() {
-document.getElementById("githubToken").type = "password";
-document.getElementById("githubToken").value = "";
-mostrarNotificacion("Token ocultado");
+  document.getElementById("githubToken").type = "password";
+  document.getElementById("githubToken").value = "";
+  mostrarNotificacion("Token ocultado");
 }
 
 function agregarTemporada() {
-const nombre = document.getElementById("temporada").value.trim();
-const urlBase = document.getElementById("urlBase").value.trim();
-const totalCapitulos = document.getElementById("totalCapitulos").value;
+  const nombre = document.getElementById("temporada").value.trim();
+  const urlBase = document.getElementById("urlBase").value.trim();
+  const totalCapitulos = document.getElementById("totalCapitulos").value;
 
-if (!nombre || !urlBase || !totalCapitulos) {
-alert("Completa todos los campos de la temporada.");
-return;
-}
+  if (!nombre || !urlBase || !totalCapitulos) {
+    alert("Completa todos los campos de la temporada.");
+    return;
+  }
 
-// Si estamos editando una temporada existente
-if (editandoTemporadaIndex !== -1) {
-temporadas[editandoTemporadaIndex] = { 
-  temporada: nombre, 
-  url极速赛车开奖结果
-Base: urlBase,
-  totalCapitulos: parseInt(totalCapitulos)
-};
-editandoTemporadaIndex = -1;
-} else {
-// Agregar nueva temporada
-temporadas.push({ 
-  temporada: nombre, 
-  urlBase: urlBase,
-  totalCapitulos: parseInt(totalCapitulos)
-});
-}
+  // Si estamos editando una temporada existente
+  if (editandoTemporadaIndex !== -1) {
+    temporadas[editandoTemporadaIndex] = { 
+      temporada: nombre, 
+      urlBase: urlBase,
+      totalCapitulos: parseInt(totalCapitulos)
+    };
+    editandoTemporadaIndex = -1;
+  } else {
+    // Agregar nueva temporada
+    temporadas.push({ 
+      temporada: nombre, 
+      urlBase: urlBase,
+      totalCapitulos: parseInt(totalCapitulos)
+    });
+  }
 
-document.getElementById("temporada").value = "";
-document.getElementById("urlBase").value = "";
-document.getElementById("totalCapitulos").value = "1";
-renderTemporadas();
+  document.getElementById("temporada").value = "";
+  document.getElementById("urlBase").value = "";
+  document.getElementById("totalCapitulos").value = "1";
+  renderTemporadas();
 }
 
 function renderTemporadas() {
-const lista = document.getElementById("temporadasLista");
-lista.innerHTML = "";
-temporadas.forEach((t, i) => {
-const contenedor = document.createElement("div");
-contenedor.className = "temporada-item";
-contenedor.id = `temporada-${i}`;
+  const lista = document.getElementById("temporadasLista");
+  lista.innerHTML = "";
+  temporadas.forEach((t, i) => {
+    const contenedor = document.createElement("div");
+    contenedor.className = "temporada-item";
+    contenedor.id = `temporada-${i}`;
 
-// Acortamos la URL visualmente si es muy larga
-const urlDisplay = t.urlBase.length > 50 ? t.urlBase.substring(0, 47) + '...' : t.urlBase;
+    // Acortamos la URL visualmente si es muy larga
+    const urlDisplay = t.urlBase.length > 50 ? t.urlBase.substring(0, 47) + '...' : t.urlBase;
 
-contenedor.innerHTML = `
-<div class="temporada-view">
-  <strong>Temporada ${i + 1}: ${t.temporada}</strong><br>
-  <small>URL: <span class="temporada-url" title="${t.urlBase}">${urlDisplay}</span> | Capítulos: ${t.totalCapitulos}</small>
-  <div style="margin-top: 10px;">
-    <button onclick="editarTemporada(${i})" class="edit-temporada-btn">✏️ Editar</button>
-    <button onclick="eliminarTemporada(${i})" style="margin-left: 5px; padding: 5极速赛车开奖结果
-px 10px;">🗑️ Eliminar</button>
-  </div>
-</div>
-<div class="temporada-editable">
-  <strong>Editando Temporada ${i + 1}:</strong><br>
-  <label>Nombre:</label>
-  <极速赛车开奖结果
-input type="text" id="edit-temporada-${i}" value="${t.temporada}" />
-  <label>URL base:</label>
-  <input type="text" id="edit-urlBase-${极速赛车开奖结果
-i}" value="${t.urlBase}" />
-  <label>Total de capítulos:</label>
-  <input type="number" id="edit-totalCapitulos-${i}" value="${t.totalCapitulos}" min="1" />
-  <div style="margin-top: 10px;">
-    <button onclick="guardarEdicionTemporada(${i})">💾 Guardar</button>
-    <button onclick="cancelarEdicionTemporada(${i})" style="margin-left: 5px;">❌ Cancelar</button>
-  </div>
-</div>
-`;
-lista.appendChild(contenedor);
-});
+    contenedor.innerHTML = `
+    <div class="temporada-view">
+      <strong>Temporada ${i + 1}: ${t.temporada}</strong><br>
+      <small>URL: <span class="temporada-url" title="${t.urlBase}">${urlDisplay}</span> | Capítulos: ${t.totalCapitulos}</small>
+      <div style="margin-top: 10px;">
+        <button onclick="editarTemporada(${i})" class="edit-temporada-btn">✏️ Editar</button>
+        <button onclick="eliminarTemporada(${i})" style="margin-left: 5px; padding: 5px 10px;">🗑️ Eliminar</button>
+      </div>
+    </div>
+    <div class="temporada-editable">
+      <strong>Editando Temporada ${i + 1}:</strong><br>
+      <label>Nombre:</label>
+      <input type="text" id="edit-temporada-${i}" value="${t.temporada}" />
+      <label>URL base:</label>
+      <input type="text" id="edit-urlBase-${i}" value="${t.urlBase}" />
+      <label>Total de capítulos:</label>
+      <input type="number" id="edit-totalCapitulos-${i}" value="${t.totalCapitulos}" min="1" />
+      <div style="margin-top: 10px;">
+        <button onclick="guardarEdicionTemporada(${i})">💾 Guardar</button>
+        <button onclick="cancelarEdicionTemporada(${i})" style="margin-left: 5px;">❌ Cancelar</button>
+      </div>
+    </div>
+    `;
+    lista.appendChild(contenedor);
+  });
 }
 
 function editarTemporada(index) {
-// Ocultar todas las vistas y mostrar solo la editable para esta temporada
-document.querySelectorAll('.temporada-view').forEach(v => v.style.display = 'block');
-document.querySelectorAll('.temporada-editable').forEach(e => e.style.display = 'none');
+  // Ocultar todas las vistas y mostrar solo la editable para esta temporada
+  document.querySelectorAll('.temporada-view').forEach(v => v.style.display = 'block');
+  document.querySelectorAll('.temporada-editable').forEach(e => e.style.display = 'none');
   
-document.querySelector(`#temporada-${index} .temporada-view`).style.display = 'none';
-document.querySelector(`#temporada-${index} .temporada-editable`).style.display = 'block';
+  document.querySelector(`#temporada-${index} .temporada-view`).style.display = 'none';
+  document.querySelector(`#temporada-${index} .temporada-editable`).style.display = 'block';
   
-editandoTemporadaIndex = index;
+  editandoTemporadaIndex = index;
 }
 
 function guardarEdicionTemporada(index) {
-const nuevoNombre = document.getElementById(`edit-temporada-${index}`).value.trim();
-const nuevaUrl = document.getElementById(`edit-urlBase-${index}`).value.trim();
-const nuevosCapitulos = document.getElementById(`edit极速赛车开奖结果
--totalCapitulos-${index}`).value;
+  const nuevoNombre = document.getElementById(`edit-temporada-${index}`).value.trim();
+  const nuevaUrl = document.getElementById(`edit-urlBase-${index}`).value.trim();
+  const nuevosCapitulos = document.getElementById(`edit-totalCapitulos-${index}`).value;
 
-if (!nuevoNombre || !nuevaUrl || !nuevosCapitulos) {
-alert("Completa todos los campos de la temporada.");
-return;
-}
+  if (!nuevoNombre || !nuevaUrl || !nuevosCapitulos) {
+    alert("Completa todos los campos de la temporada.");
+    return;
+  }
 
-temporadas[index] = {
-temporada: nuevoNombre,
-urlBase: nuevaUrl,
-totalCapitulos: parseInt(nuevosCapitulos)
-};
+  temporadas[index] = {
+    temporada: nuevoNombre,
+    urlBase: nuevaUrl,
+    totalCapitulos: parseInt(nuevosCapitulos)
+  };
 
-// Volver a la vista normal
-document.querySelector(`#temporada-${index} .极速赛车开奖结果
-temporada-view`).style.display = 'block';
-document.querySelector(`#temporada-${index} .temporada-editable`).style.display = 'none';
+  // Volver a la vista normal
+  document.querySelector(`#temporada-${index} .temporada-view`).style.display = 'block';
+  document.querySelector(`#temporada-${index} .temporada-editable`).style.display = 'none';
 
-// Actualizar la visualización
-renderTemporadas();
+  // Actualizar la visualización
+  renderTemporadas();
 }
 
 function cancelarEdicionTemporada(index) {
-// Volver a la vista normal
-document.querySelector(`#temporada-${index} .temporada-view`).style.display = 'block';
-document.querySelector(`#temporada-${index} .temporada-editable`).style.display = 'none';
-editandoTemporadaIndex = -1;
+  // Volver a la vista normal
+  document.querySelector(`#temporada-${index} .temporada-view`).style.display = 'block';
+  document.querySelector(`#temporada-${index} .temporada-editable`).style.display = 'none';
+  editandoTemporadaIndex = -1;
 }
 
 function eliminarTemporada(index) {
-if (confirm("¿Eliminar esta temporada?")) {
-temporadas.splice(index, 1);
-renderTemporadas();
-}
+  if (confirm("¿Eliminar esta temporada?")) {
+    temporadas.splice(index, 1);
+    renderTemporadas();
+  }
 }
 
 function agregarContenido() {
-const tipo = document.getElementById("tipo").value;
-const titulo = document.getElementById("titulo").value.trim();
-const imagen = document.getElementById("imagen").value.trim();
-const esSerieAnime = (tipo === 'Serie' || tipo === 'Anime');
+  const tipo = document.getElementById("tipo").value;
+  const titulo = document.getElementById("titulo").value.trim();
+  const imagen = document.getElementById("imagen").value.trim();
+  const esSerieAnime = (tipo === 'Serie' || tipo === 'Anime');
 
-// Validaciones básicas
-if (!titulo || !imagen) {
-alert("Completa todos los campos requeridos.");
-return;
-}
+  // Validaciones básicas
+  if (!titulo || !imagen) {
+    alert("Completa todos los campos requeridos.");
+    return;
+  }
 
-let nuevo;
+  let nuevo;
 
-if (tipo === "Pelicula") {
-const categoria = document.getElementById("categoria").value.trim();
-const estreno = document.getElementById("estreno").value;
-const urlPelicula = document.getElementById("urlPelicula").value.trim();
-  
-if (!categoria || !urlPelicula) {
-alert("Completa todos los campos para Película.");
-return;
-}
-  
-nuevo = { tipo, titulo, imagen, categoria, estreno, url: urlPelicula };
-} else if (tipo === "Tv") {
-const categoria = document.getElementById("categoria").value.trim();
-const estreno = document.getElementById("estreno").value;
-const urlTv = document.getElementById("urlTv").value.trim();
-  
-if (!极速赛车开奖结果
-categoria || !urlTv) {
-alert("Completa todos los campos para TV.");
-return;
-}
-  
-nuevo = { tipo, titulo, imagen, categoria, estreno, url: urlTv };
-} else {
-// Para Series y Anime
-const idSerieAnime = document.getElementById("idSerieAnime").value.trim();
-  
-if (!idSerieAnime || temporadas.length === 0) {
-alert("Completa el ID y agrega al menos una temporada.");
-return;
-}
-  
-nuevo = { 
-tipo, 
-titulo, 
-imagen,
-id: idSerieAnime,
-temporadas: JSON.parse(JSON.stringify(temporadas)) 
-};
-}
+  if (tipo === "Pelicula") {
+    const categoria = document.getElementById("categoria").value.trim();
+    const estreno = document.getElementById("estreno").value;
+    const urlPelicula = document.getElementById("urlPelicula").value.trim();
+    
+    if (!categoria || !urlPelicula) {
+      alert("Completa todos los campos para Película.");
+      return;
+    }
+    
+    nuevo = { tipo, titulo, imagen, categoria, estreno, url: urlPelicula };
+  } else if (tipo === "Tv") {
+    const categoria = document.getElementById("categoria").value.trim();
+    const estreno = document.getElementById("estreno").value;
+    const urlTv = document.getElementById("urlTv").value.trim();
+    
+    if (!categoria || !urlTv) {
+      alert("Completa todos los campos para TV.");
+      return;
+    }
+    
+    nuevo = { tipo, titulo, imagen, categoria, estreno, url: urlTv };
+  } else {
+    // Para Series y Anime
+    const idSerieAnime = document.getElementById("idSerieAnime").value.trim();
+    
+    if (!idSerieAnime || temporadas.length === 0) {
+      alert("Completa el ID y agrega al menos una temporada.");
+      return;
+    }
+    
+    nuevo = { 
+      tipo, 
+      titulo, 
+      imagen,
+      id: idSerieAnime,
+      temporadas: JSON.parse(JSON.stringify(temporadas)) 
+    };
+  }
 
-if (editIndex >= 0) {
-contenidos[editIndex] = nuevo;
-editIndex = -1;
-document.getElementById("agregarBtn").textContent = "Agregar al JSON";
-} else {
-contenidos.push(nuevo);
-}
+  if (editIndex >= 0) {
+    contenidos[editIndex] = nuevo;
+    editIndex = -1;
+    document.getElementById("agregarBtn").textContent = "Agregar al JSON";
+  } else {
+    contenidos.push(nuevo);
+  }
 
-temporadas = [];
-editandoTemporadaIndex = -1;
-actualizarVistaJSON();
-limpiarCampos();
+  temporadas = [];
+  editandoTemporadaIndex = -1;
+  actualizarVistaJSON();
+  limpiarCampos();
 
-// Desplazarse al formulario después de agregar
-document.querySelector('.form-section').scrollIntoView({ behavior: 'smooth' });
+  // Desplazarse al formulario después de agregar
+  document.querySelector('.form-section').scrollIntoView({ behavior: 'smooth' });
 }
 
 function limpiarCampos() {
-document.getElementById("tipo").value = "Pelicula";
-document.getElementById("titulo").极速赛车开奖结果
-value = "";
-document.getElementById("imagen").value = "";
-document.getElementById("categoria").value = "";
-document.getElementById("estreno").value = "";
-document.getElementById("urlPelicula").value = "";
-document.getElementById("urlTv").value = "";
-document.getElementById("idSerieAnime").value = "";
-document.getElementById("temporada").value = "";
-document.getElementById("urlBase").value = "";
-document.getElementById("totalCapitulos").value = "1";
-document.getElementById("bloqueSerieAnime").style.display = "none";
-document.getElementById("camposPelicula极速赛车开奖结果
-Tv").style.display = "block";
-document.getElementById("bloquePelicula").style.display = "block";
-document.getElementById("bloqueTv").style.display = "none";
-document.getElementById("temporadasLista").innerHTML = "";
+  document.getElementById("tipo").value = "Pelicula";
+  document.getElementById("titulo").value = "";
+  document.getElementById("imagen").value = "";
+  document.getElementById("categoria").value = "";
+  document.getElementById("estreno").value = "";
+  document.getElementById("urlPelicula").value = "";
+  document.getElementById("urlTv").value = "";
+  document.getElementById("idSerieAnime").value = "";
+  document.getElementById("temporada").value = "";
+  document.getElementById("urlBase").value = "";
+  document.getElementById("totalCapitulos").value = "1";
+  document.getElementById("bloqueSerieAnime").style.display = "none";
+  document.getElementById("camposPeliculaTv").style.display = "block";
+  document.getElementById("bloquePelicula").style.display = "block";
+  document.getElementById("bloqueTv").style.display = "none";
+  document.getElementById("temporadasLista").innerHTML = "";
 }
 
 function actualizarVistaJSON() {
-const version = document.getElementById("version").value;
-const mensaje = document.getElementById("mensaje").value;
-const json = { version, mensaje, contenidos };
-document.getElementById("jsonOutput").value = JSON.stringify(json, null, 2);
-actualizarTabla();
+  const version = document.getElementById("version").value;
+  const mensaje = document.getElementById("mensaje").value;
+  const json = { version, mensaje, contenidos };
+  document.getElementById("jsonOutput").value = JSON.stringify(json, null, 2);
+  actualizarTabla();
 }
 
 function actualizarTabla() {
-const tbody = document.querySelector("#tablaBody");
-tbody.innerHTML = "";
+  const tbody = document.querySelector("#tablaBody");
+  tbody.innerHTML = "";
 
-// Agrupar contenidos por categoría para Películas y TV
-const categoriasPeliculas = {};
-const categoriasTv = {};
-const series = [];
-const animes = [];
+  // Agrupar contenidos por categoría para Películas y TV
+  const categoriasPeliculas = {};
+  const categoriasTv = {};
+  const series = [];
+  const animes = [];
 
-// Separar contenidos por tipo极速赛车开奖结果
- y categoría
-contenidos.forEach((item, i) => {
-if (item.tipo === "Pelicula") {
-if (!categoriasPeliculas[item.categoria]) {
-categoriasPeliculas[item.categoria] = [];
-}
-categoriasPeliculas[item.categoria].push({ ...item, index: i });
-} else if (item.tipo === "Tv") {
-if (!categoriasTv[item.categoria]) {
-categoriasTv[item.categoria] = [];
-}
-categoriasTv[item.categoria].push({ ...item, index: i });
-} else if (item.tipo === "Serie") {
-series.push({ ...item, index: i });
-} else if (item.tipo === "Anime") {
-animes.push({ ...item, index: i });
-}
-});
+  // Separar contenidos por tipo y categoría
+  contenidos.forEach((item, i) => {
+    if (item.tipo === "Pelicula") {
+      if (!categoriasPeliculas[item.categoria]) {
+        categoriasPeliculas[item.categoria] = [];
+      }
+      categoriasPeliculas[item.categoria].push({ ...item, index: i });
+    } else if (item.tipo === "Tv") {
+      if (!categoriasTv[item.categoria]) {
+        categoriasTv[item.categoria] = [];
+      }
+      categoriasTv[item.categoria].push({ ...item, index: i });
+    } else if (item.tipo === "Serie") {
+      series.push({ ...item, index: i });
+    } else if (item.tipo === "Anime") {
+      animes.push({ ...item, index: i });
+    }
+  });
 
-// Función para agregar una categoría a la tabla
-function agregarCategoria(tbody, tipo, categoria, items) {
-// Si la categoría no está definida en el estado, inicializarla como expandida
-if (categoriasExpandidas[`${tipo}-${categoria}`] === undefined) {
-categoriasExpandidas[`${tipo}-${categoria}`] = true;
-}
+  // Función para agregar una categoría a la tabla
+  function agregarCategoria(tbody, tipo, categoria, items) {
+    // Si la categoría no está definida en el estado, inicializarla como expandida
+    if (categoriasExpandidas[`${tipo}-${categoria}`] === undefined) {
+      categoriasExpandidas[`${tipo}-${categoria}`] = true;
+    }
 
-const isExpanded = categoriasExpandidas[`${tipo}-${categoria}`];
-const rowCount = items.length;
+    const isExpanded = categoriasExpandidas[`${tipo}-${categoria}`];
+    const rowCount = items.length;
 
-// Crear fila极速赛车开奖结果
- de encabezado de categoría
-const headerRow = document.createElement('tr');
-header极速赛车开奖结果
-Row.className = 'category-header';
-headerRow.innerHTML = `
-<td colspan="2">
-<strong>${categoria} (${tipo})</strong> 
-<span style="float: right;">${isExpanded ? '▼' : '►'} ${rowCount} elemento(s)</span>
-</td>
-`;
-headerRow.onclick = () => {
-categoriasExpandidas[`${tipo}-${categoria}`] = !categoriasExpandidas[`${tipo}-${categoria}`];
-actualizarTabla();
-};
-tbody.appendChild(headerRow);
+    // Crear fila de encabezado de categoría
+    const headerRow = document.createElement('tr');
+    headerRow.className = 'category-header';
+    headerRow.innerHTML = `
+    <td colspan="2">
+      <strong>${categoria} (${tipo})</strong> 
+      <span style="float: right;">${isExpanded ? '▼' : '►'} ${rowCount} elemento(s)</span>
+    </td>
+    `;
+    headerRow.onclick = () => {
+      categoriasExpandidas[`${tipo}-${categoria}`] = !categoriasExpandidas[`${tipo}-${categoria}`];
+      actualizarTabla();
+    };
+    tbody.appendChild(headerRow);
 
-// Agregar elementos de la categoría si está expandida
-if (isExpanded) {
-items.forEach(item => {
-const fila = document.createElement("tr");
-fila.id = `fila-${item.index}`;
-fila.className = "content-row";
-fila.innerHTML = `
-<td class="content-cell">${item.index + 1}</td>
-<td class="content-cell">
-  <div class="compact-view">
-    <极速赛车开奖结果
-div class="title-line">
-      <span class="content-title">${item.titulo}</span>
-      <span class="content-type">${item.tipo}</span>
-    </div>
-    ${item.id ? `<div class="content-id">ID: ${item.id}</div>` : ''}
-    <div class="actions-line">
-      <button class="action-btn btn-move-up" onclick="moverArriba(${item.index})">⬆️</button>
-      <button class极速赛车开奖结果
-="action-btn btn-move-down" onclick="moverAbajo(${极速赛车开奖结果
-item.index})">⬇️</button>
-      <button class="action-btn btn-edit" onclick="editar(${item.index})">✏️</button>
-      <button class="action-btn btn-delete" onclick="eliminar(${item.index})">🗑️</button>
-    </div>
-  </极速赛车开奖结果
-div>
-</td>
-`;
-tbody.appendChild(fila);
-});
-}
-}
+    // Agregar elementos de la categoría si está expandida
+    if (isExpanded) {
+      items.forEach(item => {
+        const fila = document.createElement("tr");
+        fila.id = `fila-${item.index}`;
+        fila.className = "content-row";
+        fila.innerHTML = `
+        <td class="content-cell">${item.index + 1}</td>
+        <td class="content-cell">
+          <div class="compact-view">
+            <div class="title-line">
+              <span class="content-title">${item.titulo}</span>
+              <span class="content-type">${item.tipo}</span>
+            </div>
+            ${item.id ? `<div class="content-id">ID: ${item.id}</div>` : ''}
+            <div class="actions-line">
+              <button class="action-btn btn-move-up" onclick="moverArriba(${item.index})">⬆️</button>
+              <button class="action-btn btn-move-down" onclick="moverAbajo(${item.index})">⬇️</button>
+              <button class="action-btn btn-edit" onclick="editar(${item.index})">✏️</button>
+              <button class="action-btn btn-delete" onclick="eliminar(${item.index})">🗑️</button>
+            </div>
+          </div>
+        </td>
+        `;
+        tbody.appendChild(fila);
+      });
+    }
+  }
 
-// Agregar categorías de Películas
-Object.keys(categoriasPeliculas).sort().forEach(categoria => {
-agregarCategoria(tbody, "Película", categoria, categoriasPeliculas[categoria]);
-});
+  // Agregar categorías de Películas
+  Object.keys(categoriasPeliculas).sort().forEach(categoria => {
+    agregarCategoria(tbody, "Película", categoria, categoriasPeliculas[categoria]);
+  });
 
-// Agregar categorías de TV
-Object.keys(categoriasTv).sort().forEach(categoria => {
-agregarCategoria(tbody, "TV", categoria, categoriasTv[categoria]);
-});
+  // Agregar categorías de TV
+  Object.keys(categoriasTv).sort().forEach(categoria => {
+    agregarCategoria(tbody, "TV", categoria, categoriasTv[categoria]);
+  });
 
-// Agregar Series (sin categorías)
-if (series.length > 0) {
-const headerRow = document.createElement('tr');
-headerRow.className = 'category-header';
-headerRow.innerHTML = `
-<td colspan="2">
-<strong>Series</strong> 
-<span style="float: right;">${categoriasExpandidas['Series'] ? '▼' : '►'} ${series.length} elemento(s)</span>
-</td>
-`;
-headerRow.onclick = () => {
-categoriasExpandidas['Series'] = !categoriasExpandidas['Series'];
-actualizarTabla();
-};
-tbody.appendChild(headerRow);
+  // Agregar Series (sin categorías)
+  if (series.length > 0) {
+    const headerRow = document.createElement('tr');
+    headerRow.className = 'category-header';
+    headerRow.innerHTML = `
+    <td colspan="2">
+      <strong>Series</strong> 
+      <span style="float: right;">${categoriasExpandidas['Series'] ? '▼' : '►'} ${series.length} elemento(s)</span>
+    </td>
+    `;
+    headerRow.onclick = () => {
+      categoriasExpandidas['Series'] = !categoriasExpandidas['Series'];
+      actualizarTabla();
+    };
+    tbody.appendChild(headerRow);
 
-if (categoriasExpandidas['Series']) {
-series.forEach(item => {
-const fila = document.createElement("tr");
-fila.id = `fila-${item.index}`;
-fila.className = "content-row";
-fila.innerHTML = `
-<td class="content-cell">${item.index + 1}</td>
-<td class="content-cell">
-  <div class="compact-view">
-    <div class="title-line">
-      <span class="content-title">${item.titulo}</span>
-      <span class="content-type">${item.tipo}</span>
-    </div>
-    ${item.id ? `<div class="content-id极速赛车开奖结果
-">ID: ${item.id}</div>` : ''}
-    <div class="actions-line">
-      <button class="action-btn btn-move-up" onclick="moverArriba(${item.index})">⬆️</button>
-      <button class="action-btn btn-move-down" onclick="moverAbajo(${item.index})">⬇️</button>
-      <button class="action-btn btn-edit" onclick="editar(${item.index})">✏️</button>
-      <button class="action-btn btn-delete" onclick="eliminar(${item.index})">🗑️</button>
-    </div>
-  </div>
-</td>
-`;
-tbody.appendChild(fila);
-});
-}
-}
+    if (categoriasExpandidas['Series']) {
+      series.forEach(item => {
+        const fila = document.createElement("tr");
+        fila.id = `fila-${item.index}`;
+        fila.className = "content-row";
+        fila.innerHTML = `
+        <td class="content-cell">${item.index + 1}</td>
+        <td class="content-cell">
+          <div class="compact-view">
+            <div class="title-line">
+              <span class="content-title">${item.titulo}</span>
+              <span class="content-type">${item.tipo}</span>
+            </div>
+            ${item.id ? `<div class="content-id">ID: ${item.id}</div>` : ''}
+            <div class="actions-line">
+              <button class="action-btn btn-move-up" onclick="moverArriba(${item.index})">⬆️</button>
+              <button class="action-btn btn-move-down" onclick="moverAbajo(${item.index})">⬇️</button>
+              <button class="action-btn btn-edit" onclick="editar(${item.index})">✏️</button>
+              <button class="action-btn btn-delete" onclick="eliminar(${item.index})">🗑️</button>
+            </div>
+          </div>
+        </td>
+        `;
+        tbody.appendChild(fila);
+      });
+    }
+  }
 
-// Agregar Animes (sin categorías)
-if (animes.length > 0) {
-const headerRow = document.createElement('tr');
-headerRow.className = 'category-header';
-headerRow.innerHTML = `
-<td colspan="2">
-<strong>Animes</strong> 
-<span style="float: right;">${categoriasExpandidas['Animes'] ? '▼' : '►'} ${animes.length} elemento(s)</span>
-</td>
-`;
-headerRow.onclick = () => {
-categoriasExpandidas['Animes'] = !categoriasExpandidas['极速赛车开奖结果
-Animes'];
-actualizarTabla();
-};
-tbody.appendChild(headerRow);
+  // Agregar Animes (sin categorías)
+  if (animes.length > 0) {
+    const headerRow = document.createElement('tr');
+    headerRow.className = 'category-header';
+    headerRow.innerHTML = `
+    <td colspan="2">
+      <strong>Animes</strong> 
+      <span style="float: right;">${categoriasExpandidas['Animes'] ? '▼' : '►'} ${animes.length} elemento(s)</span>
+    </td>
+    `;
+    headerRow.onclick = () => {
+      categoriasExpandidas['Animes'] = !categoriasExpandidas['Animes'];
+      actualizarTabla();
+    };
+    tbody.appendChild(headerRow);
 
-if (categoriasExpandidas['Animes']) {
-animes.forEach(item => {
-const fila = document.createElement("tr");
-fila.id = `fila-${极速赛车开奖结果
-item.index}`;
-fila.className = "content-row";
-fila.innerHTML = `
-<td class="content-cell">${item.index + 1}</td>
-<td class="content-cell">
-  <div class="compact-view">
-    <div class="title-line">
-      <span class="content-title">${item.titulo}</span>
-      <span class="content-type">${item.tipo}</span>
-    </div>
-    ${item.id ? `<div class="content-id">ID: ${item.id}</div>` : ''}
-    <div class="actions-line">
-      <button class="action-btn btn-move-up" onclick="moverArriba(${item.index})">⬆极速赛车开奖结果
-️</button>
-      <button class="action-btn btn-move-down" onclick="moverAbajo(${item.index})">⬇️</button>
-      <button class="action-btn btn-edit" onclick="editar(${item.index})">✏️</button>
-      <button class="action-btn btn-delete" onclick="eliminar(${item.index})">🗑️</button>
-    </div>
-  </div>
-</td>
-`;
-tbody.appendChild(fila);
-});
-}
-}
+    if (categoriasExpandidas['Animes']) {
+      animes.forEach(item => {
+        const fila = document.createElement("tr");
+        fila.id = `fila-${item.index}`;
+        fila.className = "content-row";
+        fila.innerHTML = `
+        <td class="content-cell">${item.index + 1}</td>
+        <td class="content-cell">
+          <div class="compact-view">
+            <div class="title-line">
+              <span class="content-title">${item.titulo}</span>
+              <span class="content-type">${item.tipo}</span>
+            </div>
+            ${item.id ? `<div class="content-id">ID: ${item.id}</div>` : ''}
+            <div class="actions-line">
+              <button class="action-btn btn-move-up" onclick="moverArriba(${item.index})">⬆️</button>
+              <button class="action-btn btn-move-down" onclick="moverAbajo(${item.index})">⬇️</button>
+              <button class="action-btn btn-edit" onclick="editar(${item.index})">✏️</button>
+              <button class="action-btn btn-delete" onclick="eliminar(${item.index})">🗑️</button>
+            </div>
+          </div>
+        </td>
+        `;
+        tbody.appendChild(fila);
+      });
+    }
+  }
 }
 
 function moverArriba(i) {
-if (i > 0) {
-[contenidos[i], contenidos[i - 1]] = [contenidos[i - 1], contenidos[i]];
-actualizarVistaJSON();
-}
+  if (i > 0) {
+    [contenidos[i], contenidos[i - 1]] = [contenidos[i - 1], contenidos[i]];
+    actualizarVistaJSON();
+  }
 }
 
 function moverAbajo(i) {
-if (i < contenidos.length - 1) {
-[contenidos[i极速赛车开奖结果
-], contenidos[i + 1]] = [contenidos[i + 1], contenidos[i]];
-actualizarVistaJSON();
-}
+  if (i < contenidos.length - 1) {
+    [contenidos[i], contenidos[i + 1]] = [contenidos[i + 1], contenidos[i]];
+    actualizarVistaJSON();
+  }
 }
 
 function editar(index) {
-const item = contenidos[index];
-document.getElementById("tipo").value = item.tipo;
-document.getElementById("titulo").value = item.titulo;
-document.getElementById("imagen").value = item.imagen;
+  const item = contenidos[index];
+  document.getElementById("tipo").value = item.tipo;
+  document.getElementById("titulo").value = item.titulo;
+  document.getElementById("imagen").value = item.imagen;
 
-if (item.tipo === "Pelicula" || item.tipo === "Tv") {
-document.getElementById("categoria").value = item.categoria;
-document.getElementById("estreno").value = item.estreno || "";
-  
-if (item.tipo === "Pelicula") {
-document.getElementById("urlPelicula").value = item.url;
-} else {
-document.getElementById("urlTv").value = item.url;
-}
-} else {
-// Para Series y Anime
-document.getElementById("idSerieAnime").value = item.id || "";
-temporadas = item.temporadas ? JSON.parse(JSON.stringify(item.temporadas)) : [];
-renderTemporadas();
-}
+  if (item.tipo === "Pelicula" || item.tipo === "Tv") {
+    document.getElementById("categoria").value = item.categoria;
+    document.getElementById("estreno").value = item.estreno || "";
+    
+    if (item.tipo === "Pelicula") {
+      document.getElementById("urlPelicula").value = item.url;
+    } else {
+      document.getElementById("urlTv").value = item.url;
+    }
+  } else {
+    // Para Series y Anime
+    document.getElementById("idSerieAnime").value = item.id || "";
+    temporadas = item.temporadas ? JSON.parse(JSON.stringify(item.temporadas)) : [];
+    renderTemporadas();
+  }
 
-editIndex = index;
-document.getElementById("agregarBtn").textContent = "Guardar Cambios";
-alternarCampos();
+  editIndex = index;
+  document.getElementById("agregarBtn").textContent = "Guardar Cambios";
+  alternarCampos();
 
-// Desplazarse al formulario al editar
-document.querySelector('.form-section').scrollIntoView({ behavior: 'smooth' });
+  // Desplazarse al formulario al editar
+  document.querySelector('.form-section').scrollIntoView({ behavior: 'smooth' });
 }
 
 function eliminar(index) {
-if (confirm("¿Seguro que deseas eliminar este contenido?")) {
-contenidos.splice(index, 1);
-actualizarVistaJSON();
-}
+  if (confirm("¿Seguro que deseas eliminar este contenido?")) {
+    contenidos.splice(index, 1);
+    actualizarVistaJSON();
+  }
 }
 
 function xorEncrypt(str, key) {
-let result = '';
-for (let i = 0; i < str.length; i++) {
-result += String.fromCharCode(str.charCodeAt(i) ^ key.charCodeAt(i % key.length));
-}
-return result;
+  let result = '';
+  for (let i = 0; i < str.length; i++) {
+    result += String.fromCharCode(str.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+  }
+  return result;
 }
 
 function generarJSON() {
-const clave = document.getElementById("clave").value.trim();
-if (!clave) {
-alert("Por favor ingresa una clave de encriptación.");
-return;
-}
-const version = document.getElementById("version").value;
-const mensaje = document.getElementById("mensaje").value;
-const json = { version, mensaje, contenidos };
-const encriptado = btoa(xorEncrypt(JSON.stringify(json), clave));
-document.getElementById("jsonEncrypted").value = encriptado;
-actualizarVistaJSON();
+  const clave = document.getElementById("clave").value.trim();
+  if (!clave) {
+    alert("Por favor ingresa una clave de encriptación.");
+    return;
+  }
+  const version = document.getElementById("version").value;
+  const mensaje = document.getElementById("mensaje").value;
+  const json = { version, mensaje, contenidos };
+  const encriptado = btoa(unescape(encodeURIComponent(xorEncrypt(JSON.stringify(json), clave))));
+  document.getElementById("jsonEncrypted").value = encriptado;
+  actualizarVistaJSON();
 }
 
 function copiarJSON() {
-const jsonEncrypted = document.getElementById("jsonEncrypted");
-if (!jsonEncrypted.value) {
-alert("Primero genera el JSON encriptado.");
-return;
-}
-jsonEncrypted.select();
-document.execCommand("copy");
-mostrarNotificacion("¡JSON encriptado copiado al portapapeles!");
+  const jsonEncrypted = document.getElementById("jsonEncrypted");
+  if (!jsonEncrypted.value) {
+    alert("Primero genera el JSON encriptado.");
+    return;
+  }
+  jsonEncrypted.select();
+  document.execCommand("copy");
+  mostrarNotificacion("¡JSON encriptado copiado al portapapeles!");
 }
 
 function mostrarNotificacion(mensaje) {
-const notification = document.getElementById("notification");
-notification.textContent = mensaje;
-notification.classList.add("show");
-setTimeout(() => {
-notification.classList.remove("show");
-}, 3000);
+  const notification = document.getElementById("notification");
+  notification.textContent = mensaje;
+  notification.classList.add("show");
+  setTimeout(() => {
+    notification.classList.remove("show");
+  }, 3000);
 }
 
 function xorDecrypt(str, key) {
-let result = '';
-for (let i = 0; i < str.length; i++) {
-result += String.fromCharCode(str.charCodeAt(i) ^ key.charCodeAt(i % key.length));
-}
-return result;
+  let result = '';
+  for (let i = 0; i < str.length; i++) {
+    result += String.fromCharCode(str.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+  }
+  return result;
 }
 
 function restaurarJSON() {
-const clave = document.getElementById("restore极速赛车开奖结果
-Key").value.trim();
-const data = document.getElementById("jsonRestoreInput").value.trim();
-极速赛车开奖结果
-if (!clave || !data) {
-alert("Debes ingresar el JSON encriptado y la clave.");
-return;
-}
-try {
-const desencriptado = xorDecrypt(atob(data), clave);
-const obj = JSON.parse(desencriptado);
-document.getElementById("version").value = obj.version || "1.0.0";
-document.getElementById("mensaje").value = obj.mensaje || "";
-contenidos = Array.isArray(obj.contenidos) ? obj.contenidos : [];
-categoriasExpandidas = {}; // Resetear estado de categorías expandidas
-actualizarVistaJSON();
-mostrarNotificacion("Contenido restaurado correctamente.");
-} catch (e) {
-alert("Error al desencriptar. Verifica la clave o el contenido.");
-console.error(e);
-}
+  const clave = document.getElementById("restoreKey").value.trim();
+  const data = document.getElementById("jsonRestoreInput").value.trim();
+  
+  if (!clave || !data) {
+    alert("Debes ingresar el JSON encriptado y la clave.");
+    return;
+  }
+  try {
+    // Primero decodificamos de base64 y luego aplicamos XOR
+    const decodedData = decodeURIComponent(escape(atob(data)));
+    const desencriptado = xorDecrypt(decodedData, clave);
+    const obj = JSON.parse(desencriptado);
+    
+    document.getElementById("version").value = obj.version || "1.0.0";
+    document.getElementById("mensaje").value = obj.mensaje || "";
+    contenidos = Array.isArray(obj.contenidos) ? obj.contenidos : [];
+    categoriasExpandidas = {}; // Resetear estado de categorías expandidas
+    actualizarVistaJSON();
+    mostrarNotificacion("Contenido restaurado correctamente.");
+  } catch (e) {
+    alert("Error al desencriptar. Verifica la clave o el contenido.");
+    console.error(e);
+  }
 }
 
 // Función para buscar contenido
 function buscarContenido() {
-const searchTerm = document.getElementById("buscador").value.toLowerCase().trim();
+  const searchTerm = document.getElementById("buscador").value.toLowerCase().trim();
 
-if (!searchTerm) {
-alert("Por favor, ingresa un término de búsqueda.");
-return;
-}
+  if (!searchTerm) {
+    alert("Por favor, ingresa un término de búsqueda.");
+    return;
+  }
 
-// Quitar highlight anterior si existe
-if (currentHighlightedRow) {
-currentHighlightedRow.classList.remove("highlight");
-currentHighlightedRow = null;
-}
+  // Quitar highlight anterior si existe
+  if (currentHighlightedRow) {
+    currentHighlightedRow.classList.remove("highlight");
+    currentHighlightedRow = null;
+  }
 
-// Buscar coincidencias
-let foundIndex = -1;
-for (let i = 0; i < contenidos.length; i极速赛车开奖结果
-) {
-if (contenidos[i].titulo.toLowerCase().includes(searchTerm)) {
-foundIndex = i;
-break;
-}
-}
+  // Buscar coincidencias
+  let foundIndex = -1;
+  for (let i = 0; i < contenidos.length; i) {
+    if (contenidos[i].titulo.toLowerCase().includes(searchTerm)) {
+      foundIndex = i;
+      break;
+    }
+  }
 
-if (foundIndex === -1) {
-alert("No se encontró ningún contenido con ese título.");
-return;
-}
+  if (foundIndex === -1) {
+    alert("No se encontró ningún contenido con ese título.");
+    return;
+  }
 
-// Resaltar la fila encontrada
-const fila = document.getElementById(`fila-${foundIndex}`);
-if (fila) {
-fila.classList.add("highlight");
-currentHighlightedRow = fila;
+  // Resaltar la fila encontrada
+  const fila = document.getElementById(`fila-${foundIndex}`);
+  if (fila) {
+    fila.classList.add("highlight");
+    currentHighlightedRow = fila;
 
-// Expandir la categoría si está colapsada
-for (const key in categoriasExpandidas) {
-if (key.includes(contenidos[foundIndex].tipo) || 
-(contenidos[foundIndex].tipo === "Pelicula" && key.includes("Película")) ||
-(contenidos[foundIndex].tipo === "Tv" && key.includes("TV"))) {
-categoriasExpandidas[key极速赛车开奖结果
-] = true;
-break;
-}
-}
+    // Expandir la categoría si está colapsada
+    for (const key in categoriasExpandidas) {
+      if (key.includes(contenidos[foundIndex].tipo) || 
+          (contenidos[foundIndex].tipo === "Pelicula" && key.includes("Película")) ||
+          (contenidos[foundIndex].tipo === "Tv" && key.includes("TV"))) {
+        categoriasExpandidas[key] = true;
+        break;
+      }
+    }
 
-// Actualizar tabla para mostrar la categoría expandida
-actualizarTabla();
+    // Actualizar tabla para mostrar la categoría expandida
+    actualizarTabla();
 
-// Desplazarse a la fila encontrada
-setTimeout(() => {
-const highlightedRow = document.getElementById(`fila-${foundIndex}`);
-if (highlightedRow) {
-highlightedRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
-}
-}, 100);
-}
+    // Desplazarse a la fila encontrada
+    setTimeout(() => {
+      const highlightedRow = document.getElementById(`fila-${foundIndex}`);
+      if (highlightedRow) {
+        highlightedRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }, 100);
+  }
 }
 
 // Permitir búsqueda con la tecla Enter
 function handleSearchKeyPress(event) {
-if (event.key === 'Enter') {
-buscarContenido();
-}
+  if (event.key === 'Enter') {
+    buscarContenido();
+  }
 }
 
 /* ------------------ FUNCIONES MODIFICADAS PARA SUBIR A GITHUB ------------------ */
@@ -1241,8 +1204,7 @@ async function enviarAGithub(){
       return;
     }
     
-    const path = document.getElementById('githubPath').极速赛车开奖结果
-value.trim() || 'data/contenidos.json';
+    const path = document.getElementById('githubPath').value.trim() || 'data/contenidos.json';
     const branch = document.getElementById('githubBranch').value.trim() || 'main';
     const token = document.getElementById('githubToken').value.trim();
     if(!token) {
