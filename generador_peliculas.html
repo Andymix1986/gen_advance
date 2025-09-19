@@ -5,7 +5,6 @@
 <title>Generador JSON - King Play</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <style>
-/* (estilos exactamente como los tenías) */
 body {
 background: #121212;
 color: white;
@@ -146,7 +145,7 @@ width: 70%;
 margin: 0;
 border-radius: 8px 0 0 8px;
 }
-search-container button {
+.search-container button {
 display: inline-block;
 width: 28%;
 margin: 0;
@@ -317,7 +316,7 @@ display: flex;
 gap: 6px;
 }
 .github-section {
-border: 2px solid #6e5494; /* Color de GitHub */
+border: 2px solid #6e5494;
 border-radius: 10px;
 padding: 20px;
 margin: 25px auto;
@@ -325,8 +324,39 @@ background: #1e1e1e;
 max-width: 600px;
 box-shadow: 0 4px 15px rgba(110, 84, 148, 0.2);
 }
-.github-fields {
-display: none;
+.github-toggle {
+background: linear-gradient(to bottom, #6e5494, #514176);
+}
+.github-toggle:hover {
+background: linear-gradient(to bottom, #5d4680, #42385f);
+}
+.github-submit {
+background: linear-gradient(to bottom, #6cc644, #56a434);
+}
+.github-submit:hover {
+background: linear-gradient(to bottom, #5cb234, #468c24);
+}
+.status-indicator {
+display: inline-block;
+width: 12px;
+height: 12px;
+border-radius: 50%;
+margin-right: 8px;
+}
+.status-success {
+background-color: #6cc644;
+}
+.status-error {
+background-color: #bd2c00;
+}
+.status-pending {
+background-color: #dbab09;
+}
+.github-info {
+font-size: 0.9rem;
+color: #aaa;
+margin-top: 5px;
+text-align: center;
 }
 @media (max-width: 768px) {
 .search-container {
@@ -438,7 +468,6 @@ align-items: flex-start;
 <div class="action-buttons">
 <button onclick="generarJSON()">Generar JSON Encriptado</button>
 <button onclick="copiarJSON()" id="copiarBtn">Copiar JSON Encriptado</button>
-<button onclick="toggleGithubFields()" id="toggleGithubBtn">Configurar GitHub</button>
 </div>
 
 <label>JSON sin encriptar:</label>
@@ -448,32 +477,36 @@ align-items: flex-start;
 <textarea id="jsonEncrypted" rows="3" readonly onclick="this.select()"></textarea>
 </div>
 
-<!-- SECCIÓN DE CONFIGURACIÓN DE GITHUB -->
-<div id="githubSection" class="github-section github-fields">
-<h2 class="form-title">Configuración GitHub</h2>
+<!-- SECCIÓN DE GITHUB (OCULTA INICIALMENTE) -->
+<div class="github-section" id="githubSection" style="display: none;">
+<h2 class="form-title">🔗 Subir a GitHub</h2>
 
-<label>Usuario/Organización de GitHub:</label>
-<input type="text" id="githubOwner" placeholder="nombre-usuario" />
+<label>Token de acceso GitHub:</label>
+<input type="password" id="githubToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" />
+<p class="github-info">Necesitas un token con permisos de repositorio. <a href="https://github.com/settings/tokens" target="_blank">Generar token</a></p>
 
-<label>Repositorio:</label>
-<input type="text" id="githubRepo" placeholder="nombre-repositorio" />
+<label>Nombre de usuario/organización:</label>
+<input type="text" id="githubOwner" placeholder="tu-usuario" />
 
-<label>Ruta del archivo:</label>
-<input type="text" id="githubPath" value="data/contenidos.json" />
+<label>Nombre del repositorio:</label>
+<input type="text" id="githubRepo" placeholder="mi-repositorio" />
 
-<label>Rama:</label>
-<input type="text" id="githubBranch" value="main" />
-
-<label>Token de acceso (se ocultará después de usar):</label>
-<input type="password" id="githubToken" placeholder="Token de acceso personal" />
+<label>Ruta del archivo en el repositorio:</label>
+<input type="text" id="githubPath" value="data.json" />
 
 <label>Mensaje de commit:</label>
-<input type="text" id="githubCommitMsg" value="Actualizar contenidos desde Generador JSON" />
+<input type="text" id="githubMessage" value="Actualización automática desde King Play Generator" />
 
 <div class="action-buttons">
-<button onclick="prepararYEnviarAGithub()" id="enviarGithubBtn">Enviar a GitHub</button>
-<button onclick="ocultarToken()">Ocultar Token</button>
+<button onclick="subirAGithub()" class="github-submit">Subir a GitHub</button>
 </div>
+
+<div id="githubStatus"></div>
+</div>
+
+<!-- BOTÓN PARA MOSTRAR/OCULTAR SECCIÓN GITHUB -->
+<div class="action-buttons">
+<button onclick="toggleGitHubSection()" class="github-toggle" id="toggleGitHubBtn">Mostrar Opciones de GitHub</button>
 </div>
 
 <table id="tablaContenidos">
@@ -519,23 +552,6 @@ document.getElementById("bloqueSerieAnime").style.display = esSerieAnime ? 'bloc
 
 // Mostrar/ocultar campos de categoría y estreno
 document.getElementById("camposPeliculaTv").style.display = esSerieAnime ? 'none' : 'block';
-}
-
-function toggleGithubFields() {
-const githubSection = document.getElementById("githubSection");
-if (githubSection.classList.contains("github-fields")) {
-githubSection.classList.remove("github-fields");
-document.getElementById("toggleGithubBtn").textContent = "Ocultar GitHub";
-} else {
-githubSection.classList.add("github-fields");
-document.getElementById("toggleGithubBtn").textContent = "Configurar GitHub";
-}
-}
-
-function ocultarToken() {
-document.getElementById("githubToken").type = "password";
-document.getElementById("githubToken").value = "";
-mostrarNotificacion("Token ocultado");
 }
 
 function agregarTemporada() {
@@ -821,7 +837,7 @@ fila.innerHTML = `
 <td class="content-cell">
   <div class="compact-view">
     <div class="title-line">
-      <span class="content-title">${item.titulo</span>
+      <span class="content-title">${item.titulo}</span>
       <span class="content-type">${item.tipo}</span>
     </div>
     ${item.id ? `<div class="content-id">ID: ${item.id}</div>` : ''}
@@ -1126,129 +1142,122 @@ buscarContenido();
 }
 }
 
-/* ------------------ FUNCIONES MODIFICADAS PARA SUBIR A GITHUB ------------------ */
-function toBase64Unicode(str){
-  // encoding seguro para unicode -> base64
-  return btoa(unescape(encodeURIComponent(str)));
+// Funciones para GitHub
+function toggleGitHubSection() {
+const githubSection = document.getElementById('githubSection');
+const toggleBtn = document.getElementById('toggleGitHubBtn');
+if (githubSection.style.display === 'none') {
+githubSection.style.display = 'block';
+toggleBtn.textContent = 'Ocultar Opciones de GitHub';
+} else {
+githubSection.style.display = 'none';
+toggleBtn.textContent = 'Mostrar Opciones de GitHub';
+}
 }
 
-async function getFileSha(owner, repo, path, branch='main', token){
-  const url = `https://api.github.com/repos/${owner}/${repo}/contents/${encodeURIComponent(path)}?ref=${encodeURIComponent(branch)}`;
-  const res = await fetch(url, {
-    headers: {
-      'Authorization': `Bearer ${token}`,
-      'Accept': 'application/vnd.github+json'
-    }
-  });
-  if(res.status === 200){
-    const data = await res.json();
-    return data.sha;
-  } else if(res.status === 404){
-    return null; // no existe -> se creará
-  } else {
-    const txt = await res.text();
-    throw new Error('Error obteniendo SHA: ' + res.status + ' ' + txt);
-  }
+async function subirAGithub() {
+const token = document.getElementById('githubToken').value.trim();
+const owner = document.getElementById('githubOwner').value.trim();
+const repo = document.getElementById('githubRepo').value.trim();
+const path = document.getElementById('githubPath').value.trim();
+const message = document.getElementById('githubMessage').value.trim();
+const encryptedContent = document.getElementById('jsonEncrypted').value;
+
+// Validar campos
+if (!token || !owner || !repo || !path || !message) {
+mostrarEstadoGitHub('Por favor, completa todos los campos', 'error');
+return;
 }
 
-async function uploadToGitHub({owner, repo, path, branch='main', jsonString, token, commitMessage='Actualización desde Generador'}) {
-  const content = toBase64Unicode(jsonString);
-  const sha = await getFileSha(owner, repo, path, branch, token); // si existe, devuelve sha
-  const body = {
-    message: commitMessage,
-    content: content,
-    branch: branch
-  };
-  if (sha) body.sha = sha; // obligatorio para actualizar
-  const url = `https://api.github.com/repos/${owner}/${repo}/contents/${encodeURIComponent(path)}`;
-  const res = await fetch(url, {
-    method: 'PUT',
-    headers: {
-      'Authorization': `Bearer ${token}`,
-      'Accept': 'application/vnd.github+json',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(body)
-  });
-  const data = await res.json();
-  if(!res.ok) {
-    // GitHub devuelve detalles útiles en data; se los mostramos
-    throw new Error((data && data.message) ? data.message : JSON.stringify(data));
-  }
-  return data;
+if (!encryptedContent) {
+mostrarEstadoGitHub('Primero genera el JSON encriptado', 'error');
+return;
 }
 
-async function enviarAGithub(){
-  try {
-    // TOMA EL JSON ENCRIPTADO en lugar del sin encriptar
-    const jsonString = document.getElementById('jsonEncrypted').value;
-    if(!jsonString){
-      alert('Primero genera el JSON encriptado.');
-      return;
-    }
+mostrarEstadoGitHub('Subiendo a GitHub...', 'pending');
 
-    // Obtener datos de los campos de entrada
-    const owner = document.getElementById('githubOwner').value.trim();
-    if(!owner) {
-      alert('Por favor ingresa el usuario/organización de GitHub.');
-      return;
-    }
-    
-    const repo = document.getElementById('githubRepo').value.trim();
-    if(!repo) {
-      alert('Por favor ingresa el nombre del repositorio.');
-      return;
-    }
-    
-    const path = document.getElementById('githubPath').value.trim() || 'data/contenidos.json';
-    const branch = document.getElementById('githubBranch').value.trim() || 'main';
-    const token = document.getElementById('githubToken').value.trim();
-    if(!token) {
-      alert('Por favor ingresa tu token de acceso de GitHub.');
-      return;
-    }
-    
-    const commitMessage = document.getElementById('githubCommitMsg').value.trim() || 'Actualizar contenidos desde Generador';
+try {
+// Primero, intentamos obtener el SHA del archivo existente (si existe)
+let sha = null;
+try {
+const response = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+method: 'GET',
+headers: {
+'Authorization': `token ${token}`,
+'User-Agent': 'KingPlay-Generator'
+}
+});
 
-    mostrarNotificacion('Subiendo a GitHub...');
-    const result = await uploadToGitHub({
-      owner,
-      repo,
-      path,
-      branch,
-      jsonString, // ✅ Ahora envía el JSON encriptado
-      token,
-      commitMessage
-    });
-
-    mostrarNotificacion('Subido a GitHub correctamente.');
-    
-    // ✅ Abre en nueva pestaña/no redirige el WebView
-    if(result && result.content && result.content.html_url){
-      window.open(result.content.html_url, '_blank');
-    } else {
-      console.log('Resultado GitHub:', result);
-      alert('Subido con éxito (revisa la consola para más detalles).');
-    }
-  } catch (err) {
-    console.error(err);
-    alert('Error subiendo a GitHub: ' + (err.message || err));
-  }
+if (response.ok) {
+const data = await response.json();
+sha = data.sha;
+}
+} catch (e) {
+// El archivo probablemente no existe, continuamos sin SHA
+console.log('Archivo no existente, se creará uno nuevo');
 }
 
-function prepararYEnviarAGithub() {
-  // Generar el JSON encriptado primero
-  generarJSON();
-  
-  // Pequeña pausa para asegurar que se ha generado
-  setTimeout(() => {
-    enviarAGithub();
-  }, 100);
+// Codificar contenido en base64
+const content = btoa(encryptedContent);
+
+// Configurar la solicitud para crear/actualizar el archivo
+const response = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+method: 'PUT',
+headers: {
+'Authorization': `token ${token}`,
+'Content-Type': 'application/json',
+'User-Agent': 'KingPlay-Generator'
+},
+body: JSON.stringify({
+message: message,
+content: content,
+sha: sha
+})
+});
+
+if (response.ok) {
+const data = await response.json();
+mostrarEstadoGitHub('¡Archivo subido correctamente a GitHub!', 'success');
+console.log('Archivo subido:', data);
+} else {
+const error = await response.json();
+mostrarEstadoGitHub(`Error: ${error.message}`, 'error');
+console.error('Error al subir:', error);
 }
-/* ------------------------------------------------------------------------ */
+} catch (error) {
+mostrarEstadoGitHub(`Error de conexión: ${error.message}`, 'error');
+console.error('Error:', error);
+}
+}
+
+function mostrarEstadoGitHub(mensaje, tipo) {
+const statusElement = document.getElementById('githubStatus');
+let iconClass = '';
+let statusText = '';
+
+switch (tipo) {
+case 'success':
+iconClass = 'status-success';
+statusText = '<span class="status-indicator status-success"></span> ' + mensaje;
+statusElement.style.color = '#6cc644';
+break;
+case 'error':
+iconClass = 'status-error';
+statusText = '<span class="status-indicator status-error"></span> ' + mensaje;
+statusElement.style.color = '#bd2c00';
+break;
+case 'pending':
+iconClass = 'status-pending';
+statusText = '<span class="status-indicator status-pending"></span> ' + mensaje;
+statusElement.style.color = '#dbab09';
+break;
+}
+
+statusElement.innerHTML = statusText;
+}
 
 // Inicializar
 alternarCampos();
 </script>
 </body>
- </html>
+</html>
