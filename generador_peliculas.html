@@ -366,6 +366,33 @@ hr {
     font-size: 0.8rem;
     margin-left: 8px;
 }
+.restore-section {
+    border: 2px solid #ff9800;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 25px auto;
+    background: #1e1e1e;
+    max-width: 600px;
+    box-shadow: 0 4px 15px rgba(255, 152, 0, 0.2);
+}
+.restore-toggle {
+    background: linear-gradient(to bottom, #ff9800, #f57c00);
+}
+.restore-toggle:hover {
+    background: linear-gradient(to bottom, #fb8c00, #e65100);
+}
+.restore-submit {
+    background: linear-gradient(to bottom, #4caf50, #388e3c);
+}
+.restore-submit:hover {
+    background: linear-gradient(to bottom, #43a047, #2e7d32);
+}
+.url-option {
+    background: linear-gradient(to bottom, #2196f3, #1976d2);
+}
+.url-option:hover {
+    background: linear-gradient(to bottom, #1e88e5, #1565c0);
+}
 @media (max-width: 768px) {
     .search-container {
         flex-direction: column;
@@ -524,16 +551,29 @@ hr {
     <tbody id="tablaBody"></tbody>
 </table>
 
-<div class="form-section">
+<!-- SECCIÓN DE RESTAURACIÓN MODIFICADA -->
+<div class="restore-section">
     <h2 class="form-title">🔒 Restaurar JSON Encriptado</h2>
-
-    <label>JSON encriptado a cargar:</label>
-    <textarea id="jsonRestoreInput" rows="6" placeholder="Pega aquí el JSON encriptado..."></textarea>
+    
+    <div class="action-buttons">
+        <button onclick="toggleRestoreMethod()" class="restore-toggle" id="toggleRestoreBtn">Usar URL en lugar de JSON</button>
+    </div>
+    
+    <div id="jsonRestoreContainer">
+        <label>JSON encriptado a cargar:</label>
+        <textarea id="jsonRestoreInput" rows="6" placeholder="Pega aquí el JSON encriptado..."></textarea>
+    </div>
+    
+    <div id="urlRestoreContainer" style="display: none;">
+        <label>URL del JSON encriptado:</label>
+        <input type="text" id="urlRestoreInput" placeholder="https://ejemplo.com/data.json" />
+    </div>
 
     <label>Clave para desencriptar:</label>
     <input type="text" id="restoreKey" placeholder="Clave usada para encriptar" />
 
-    <button onclick="restaurarJSON()">Restaurar contenido</button>
+    <button onclick="restaurarJSON()" class="restore-submit">Restaurar contenido</button>
+    <div id="restoreStatus"></div>
 </div>
 
 <div id="notification" class="notification">¡Contenido copiado al portapapeles!</div>
@@ -543,6 +583,7 @@ let contenidos = [], temporadas = [], editIndex = -1;
 let currentHighlightedRow = null;
 let editandoTemporadaIndex = -1;
 let categoriasExpandidas = {};
+let usarURL = false;
 
 function alternarCampos() {
     const tipo = document.getElementById("tipo").value;
@@ -894,32 +935,32 @@ function actualizarTabla() {
         };
         tbody.appendChild(headerRow);
 
-        if (categoriasExpandidas['Series']) {
-            series.forEach(item => {
-                const fila = document.createElement("tr");
-                fila.id = `fila-${item.index}`;
-                fila.className = "content-row";
-                fila.innerHTML = `
-                <td class="content-cell">${item.index + 1}</td>
-                <td class="content-cell">
-                    <div class="compact-view">
-                        <div class="title-line">
-                            <span class="content-title">${item.titulo}</span>
-                            <span class="content-type">${item.tipo}</span>
-                        </div>
-                        ${item.id ? `<div class="content-id">ID: ${item.id}</div>` : ''}
-                        <div class="actions-line">
-                            <button class="action-btn btn-move-up" onclick="moverArriba(${item.index})">⬆️</button>
-                            <button class="action-btn btn-move-down" onclick="moverAbajo(${item.index})">⬇️</button>
-                            <button class="action-btn btn-edit" onclick="editar(${item.index})">✏️</button>
-                            <button class="action-btn btn-delete" onclick="eliminar(${item.index})">🗑️</button>
-                        </div>
+    if (categoriasExpandidas['Series']) {
+        series.forEach(item => {
+            const fila = document.createElement("tr");
+            fila.id = `fila-${item.index}`;
+            fila.className = "content-row";
+            fila.innerHTML = `
+            <td class="content-cell">${item.index + 1}</td>
+            <td class="content-cell">
+                <div class="compact-view">
+                    <div class="title-line">
+                        <span class="content-title">${item.titulo}</span>
+                        <span class="content-type">${item.tipo}</span>
                     </div>
-                </td>
-                `;
-                tbody.appendChild(fila);
-            });
-        }
+                    ${item.id ? `<div class="content-id">ID: ${item.id}</div>` : ''}
+                    <div class="actions-line">
+                        <button class="action-btn btn-move-up" onclick="moverArriba(${item.index})">⬆️</button>
+                        <button class="action-btn btn-move-down" onclick="moverAbajo(${item.index})">⬇️</button>
+                        <button class="action-btn btn-edit" onclick="editar(${item.index})">✏️</button>
+                        <button class="action-btn btn-delete" onclick="eliminar(${item.index})">🗑️</button>
+                    </div>
+                </div>
+            </td>
+            `;
+            tbody.appendChild(fila);
+        });
+    }
     }
 
     // Agregar Animes (sin categorías)
@@ -1068,29 +1109,117 @@ function xorDecrypt(str, key) {
     return result;
 }
 
-function restaurarJSON() {
+// Función para cambiar entre método URL y JSON directo
+function toggleRestoreMethod() {
+    usarURL = !usarURL;
+    const jsonContainer = document.getElementById("jsonRestoreContainer");
+    const urlContainer = document.getElementById("urlRestoreContainer");
+    const toggleBtn = document.getElementById("toggleRestoreBtn");
+    
+    if (usarURL) {
+        jsonContainer.style.display = "none";
+        urlContainer.style.display = "block";
+        toggleBtn.textContent = "Usar JSON en lugar de URL";
+        toggleBtn.classList.add("url-option");
+    } else {
+        jsonContainer.style.display = "block";
+        urlContainer.style.display = "none";
+        toggleBtn.textContent = "Usar URL en lugar de JSON";
+        toggleBtn.classList.remove("url-option");
+    }
+}
+
+// Función para mostrar estado de restauración
+function mostrarEstadoRestauracion(mensaje, tipo) {
+    const statusElement = document.getElementById('restoreStatus');
+    let iconClass = '';
+    let statusText = '';
+
+    switch (tipo) {
+        case 'success':
+            iconClass = 'status-success';
+            statusText = '<span class="status-indicator status-success"></span> ' + mensaje;
+            statusElement.style.color = '#6cc644';
+            break;
+        case 'error':
+            iconClass = 'status-error';
+            statusText = '<span class="status-indicator status-error"></span> ' + mensaje;
+            statusElement.style.color = '#bd2c00';
+            break;
+        case 'pending':
+            iconClass = 'status-pending';
+            statusText = '<span class="status-indicator status-pending"></span> ' + mensaje;
+            statusElement.style.color = '#dbab09';
+            break;
+    }
+
+    statusElement.innerHTML = statusText;
+}
+
+// Función modificada para restaurar JSON
+async function restaurarJSON() {
     const clave = document.getElementById("restoreKey").value.trim();
-    const data = document.getElementById("jsonRestoreInput").value.trim();
-    if (!clave || !data) {
-        alert("Debes ingresar el JSON encriptado y la clave.");
+    
+    if (!clave) {
+        alert("Debes ingresar la clave de desencriptación.");
         return;
     }
+    
+    let data = "";
+    
+    if (usarURL) {
+        // Método URL
+        const url = document.getElementById("urlRestoreInput").value.trim();
+        if (!url) {
+            alert("Debes ingresar una URL válida.");
+            return;
+        }
+        
+        try {
+            mostrarEstadoRestauracion("Descargando datos desde la URL...", "pending");
+            
+            // Hacer la petición a la URL
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`Error HTTP: ${response.status}`);
+            }
+            
+            data = await response.text();
+            mostrarEstadoRestauracion("Datos descargados correctamente. Desencriptando...", "pending");
+        } catch (error) {
+            mostrarEstadoRestauracion("Error al descargar: " + error.message, "error");
+            console.error("Error al descargar:", error);
+            return;
+        }
+    } else {
+        // Método directo (JSON)
+        data = document.getElementById("jsonRestoreInput").value.trim();
+        if (!data) {
+            alert("Debes ingresar el JSON encriptado.");
+            return;
+        }
+    }
+    
     try {
+        // Desencriptar los datos
         const desencriptado = xorDecrypt(atob(data), clave);
         const obj = JSON.parse(desencriptado);
+        
         document.getElementById("version").value = obj.version || "1.0.0";
         document.getElementById("mensaje").value = obj.mensaje || "";
         contenidos = Array.isArray(obj.contenidos) ? obj.contenidos : [];
         categoriasExpandidas = {}; // Resetear estado de categorías expandidas
+        
         actualizarVistaJSON();
+        mostrarEstadoRestauracion("Contenido restaurado correctamente.", "success");
         mostrarNotificacion("Contenido restaurado correctamente.");
     } catch (e) {
+        mostrarEstadoRestauracion("Error al desencriptar. Verifica la clave o el contenido.", "error");
         alert("Error al desencriptar. Verifica la clave o el contenido.");
         console.error(e);
     }
 }
 
-// Función para buscar contenido
 function buscarContenido() {
     const searchTerm = document.getElementById("buscador").value.toLowerCase().trim();
 
