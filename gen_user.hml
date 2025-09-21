@@ -1,0 +1,513 @@
+<!-- Guardar como gen_user.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Gestor de Usuarios - Encriptación XOR + Base64</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #000;
+      color: #eee;
+      margin: 20px;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+
+    input, button, textarea {
+      width: 100%;
+      max-width: 400px;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #444;
+      background-color: #1a1a1a;
+      color: #fff;
+      border-radius: 5px;
+    }
+
+    button {
+      background-color: #00bfff;
+      color: #000;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background-color: #00a5dd;
+    }
+
+    textarea {
+      height: 100px;
+      resize: vertical;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      max-width: 800px;
+    }
+
+    th, td {
+      border: 1px solid #555;
+      padding: 8px;
+      text-align: center;
+    }
+
+    th {
+      background-color: #222;
+    }
+
+    .small {
+      width: auto;
+      margin: 2px;
+      padding: 6px 10px;
+    }
+
+    .flex-row {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    @media (max-width: 600px) {
+      input, button, textarea {
+        width: 100%;
+      }
+    }
+
+    /* Estilos para la sección de GitHub */
+    .github-section {
+      border: 2px solid #6e5494;
+      border-radius: 10px;
+      padding: 15px;
+      margin: 20px 0;
+      background: #1e1e1e;
+      max-width: 600px;
+      box-shadow: 0 4px 15px rgba(110, 84, 148, 0.2);
+    }
+
+    .github-toggle {
+      background: linear-gradient(to bottom, #6e5494, #514176);
+      margin-bottom: 15px;
+    }
+
+    .github-toggle:hover {
+      background: linear-gradient(to bottom, #5d4680, #42385f);
+    }
+
+    .github-submit {
+      background: linear-gradient(to bottom, #6cc644, #56a434);
+    }
+
+    .github-submit:hover {
+      background: linear-gradient(to bottom, #5cb234, #468c24);
+    }
+
+    .status-indicator {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin-right: 8px;
+    }
+
+    .status-success {
+      background-color: #6cc644;
+    }
+
+    .status-error {
+      background-color: #bd2c00;
+    }
+
+    .status-pending {
+      background-color: #dbab09;
+    }
+
+    .github-info {
+      font-size: 0.9rem;
+      color: #aaa;
+      margin-top: 5px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<h2>Gestor de Usuarios con Encriptación XOR + Base64</h2>
+
+<form id="form">
+  <label>Usuario:
+    <input type="text" id="usuario" required />
+  </label>
+
+  <label>Contraseña:
+    <input type="password" id="password" required />
+  </label>
+
+  <label>Días para expiración:
+    <input type="number" id="dias" min="1" required />
+  </label>
+
+  <label>Clave de encriptación (ej: ANDYMIX1986):
+    <input type="text" id="clave" required />
+  </label>
+
+  <div class="flex-row">
+    <button type="submit">Agregar / Actualizar Usuario</button>
+    <button type="button" id="clearForm">Limpiar Formulario</button>
+  </div>
+</form>
+
+<!-- Botón para mostrar/ocultar sección GitHub -->
+<div class="flex-row">
+  <button onclick="toggleGitHubSection()" class="github-toggle" id="toggleGitHubBtn">Mostrar Opciones de GitHub</button>
+</div>
+
+<!-- SECCIÓN DE GITHUB (OCULTA INICIALMENTE) -->
+<div class="github-section" id="githubSection" style="display: none;">
+  <h3>🔗 Subir a GitHub</h3>
+
+  <label>Token de acceso GitHub:</label>
+  <input type="password" id="githubToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" />
+  <p class="github-info">Necesitas un token con permisos de repositorio. <a href="https://github.com/settings/tokens" target="_blank" style="color: #6cc644;">Generar token</a></p>
+
+  <label>Nombre de usuario/organización:</label>
+  <input type="text" id="githubOwner" placeholder="tu-usuario" />
+
+  <label>Nombre del repositorio:</label>
+  <input type="text" id="githubRepo" placeholder="mi-repositorio" />
+
+  <label>Ruta del archivo en el repositorio:</label>
+  <input type="text" id="githubPath" value="users.json" />
+
+  <label>Mensaje de commit:</label>
+  <input type="text" id="githubMessage" value="Actualización automática desde Gestor de Usuarios" />
+
+  <div class="flex-row">
+    <button onclick="subirAGithub()" class="github-submit">Subir a GitHub</button>
+  </div>
+
+  <div id="githubStatus"></div>
+</div>
+
+<h3>JSON sin encriptar:</h3>
+<textarea id="jsonSinEncriptar" readonly></textarea>
+
+<h3>JSON encriptado (Base64):</h3>
+<textarea id="jsonEncriptado" readonly></textarea>
+<button onclick="copiarJSON()">📋 Copiar JSON encriptado</button>
+
+<h3>Desencriptar JSON:</h3>
+<textarea id="jsonParaDesencriptar" placeholder="Pega aquí el JSON encriptado en Base64"></textarea>
+<label>Clave para desencriptar:
+  <input type="text" id="claveDesencriptar" />
+</label>
+<button id="btnDesencriptar">Desencriptar</button>
+
+<h3>Resultado de desencriptación:</h3>
+<textarea id="resultadoDesencriptado" readonly></textarea>
+
+<h3>Usuarios:</h3>
+<table id="tablaUsuarios">
+  <thead>
+    <tr><th>Usuario</th><th>Contraseña</th><th>Fecha Expiración</th><th>Acciones</th></tr>
+  </thead>
+  <tbody></tbody>
+</table>
+
+<script>
+let usuarios = [];
+let editIndex = -1;
+
+function claveABytes(str) {
+  return Array.from(str).map(c => c.charCodeAt(0));
+}
+
+function xorEncrypt(dataBytes, keyBytes) {
+  return dataBytes.map((b, i) => b ^ keyBytes[i % keyBytes.length]);
+}
+
+function bytesToBase64(bytes) {
+  return btoa(String.fromCharCode(...bytes));
+}
+
+function base64ToBytes(base64) {
+  return Array.from(atob(base64)).map(c => c.charCodeAt(0));
+}
+
+function bytesToString(bytes) {
+  return String.fromCharCode(...bytes);
+}
+
+function renderTabla() {
+  const tbody = document.querySelector('#tablaUsuarios tbody');
+  tbody.innerHTML = '';
+  usuarios.forEach((u, i) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${u.user}</td>
+      <td>${u.pass}</td>
+      <td>${u.expires}</td>
+      <td>
+        <button class="small" onclick="editarUsuario(${i})">Editar</button>
+        <button class="small" onclick="eliminarUsuario(${i})">Eliminar</button>
+        <button class="small" onclick="renovarUsuario(${i})">+30 días</button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+  actualizarJSON();
+}
+
+function actualizarJSON() {
+  const clave = document.getElementById('clave').value;
+  if (!clave) {
+    document.getElementById('jsonSinEncriptar').value = '';
+    document.getElementById('jsonEncriptado').value = '';
+    return;
+  }
+
+  const jsonStr = JSON.stringify(usuarios);
+  const claveBytes = claveABytes(clave);
+  const jsonBytes = claveABytes(jsonStr);
+  const encryptedBytes = xorEncrypt(jsonBytes, claveBytes);
+  const base64 = bytesToBase64(encryptedBytes);
+
+  document.getElementById('jsonSinEncriptar').value = jsonStr;
+  document.getElementById('jsonEncriptado').value = base64;
+}
+
+function limpiarFormulario() {
+  document.getElementById('usuario').value = '';
+  document.getElementById('password').value = '';
+  document.getElementById('dias').value = '';
+  //document.getElementById('clave').value = '';
+  editIndex = -1;
+  document.querySelector('button[type=submit]').textContent = 'Agregar / Actualizar Usuario';
+  actualizarJSON();
+}
+
+function agregarOActualizarUsuario(e) {
+  e.preventDefault();
+
+  const usuario = document.getElementById('usuario').value.trim();
+  const password = document.getElementById('password').value;
+  const dias = parseInt(document.getElementById('dias').value);
+  const clave = document.getElementById('clave').value;
+
+  if (!usuario || !password || !dias || !clave) {
+    alert('Completa todos los campos');
+    return;
+  }
+
+  const fechaExp = new Date(Date.now() + dias * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+  const obj = { user: usuario, pass: password, expires: fechaExp };
+
+  if (editIndex === -1) {
+    usuarios.push(obj);
+  } else {
+    usuarios[editIndex] = obj;
+    editIndex = -1;
+    document.querySelector('button[type=submit]').textContent = 'Agregar / Actualizar Usuario';
+  }
+
+  renderTabla();
+  limpiarFormulario();
+}
+
+function editarUsuario(i) {
+  const u = usuarios[i];
+  editIndex = i;
+  document.getElementById('usuario').value = u.user;
+  document.getElementById('password').value = u.pass;
+
+  const hoy = new Date();
+  const fechaExp = new Date(u.expires);
+  const diasRestantes = Math.ceil((fechaExp - hoy) / (1000 * 60 * 60 * 24));
+  document.getElementById('dias').value = diasRestantes > 0 ? diasRestantes : 0;
+
+  document.getElementById('clave').value = '';
+  document.querySelector('button[type=submit]').textContent = 'Actualizar Usuario';
+}
+
+function eliminarUsuario(i) {
+  if (confirm('¿Seguro que quieres eliminar este usuario?')) {
+    usuarios.splice(i, 1);
+    renderTabla();
+  }
+}
+
+function renovarUsuario(i) {
+  if (confirm('¿Renovar +30 días?')) {
+    const fechaExp = new Date(usuarios[i].expires);
+    fechaExp.setDate(fechaExp.getDate() + 30);
+    usuarios[i].expires = fechaExp.toISOString().slice(0, 10);
+    renderTabla();
+  }
+}
+
+function desencriptar() {
+  const base64 = document.getElementById('jsonParaDesencriptar').value.trim();
+  const clave = document.getElementById('claveDesencriptar').value;
+  if (!base64 || !clave) {
+    alert('Ingresa el JSON y clave');
+    return;
+  }
+
+  try {
+    const claveBytes = claveABytes(clave);
+    const encryptedBytes = base64ToBytes(base64);
+    const decryptedBytes = xorEncrypt(encryptedBytes, claveBytes);
+    const jsonStr = bytesToString(decryptedBytes);
+
+    const obj = JSON.parse(jsonStr);
+    document.getElementById('resultadoDesencriptado').value = JSON.stringify(obj, null, 2);
+
+    // ✅ NUEVO: Cargar en la tabla y actualizar variable
+    usuarios = obj;
+    renderTabla();
+
+  } catch (err) {
+    alert('Error al desencriptar o JSON inválido');
+  }
+}
+
+
+function copiarJSON() {
+  const text = document.getElementById('jsonEncriptado').value;
+  if (!text) return alert('No hay JSON para copiar');
+  navigator.clipboard.writeText(text).then(() => alert('Copiado al portapapeles'));
+}
+
+// Funciones para GitHub
+function toggleGitHubSection() {
+  const githubSection = document.getElementById('githubSection');
+  const toggleBtn = document.getElementById('toggleGitHubBtn');
+  if (githubSection.style.display === 'none') {
+    githubSection.style.display = 'block';
+    toggleBtn.textContent = 'Ocultar Opciones de GitHub';
+  } else {
+    githubSection.style.display = 'none';
+    toggleBtn.textContent = 'Mostrar Opciones de GitHub';
+  }
+}
+
+async function subirAGithub() {
+  const token = document.getElementById('githubToken').value.trim();
+  const owner = document.getElementById('githubOwner').value.trim();
+  const repo = document.getElementById('githubRepo').value.trim();
+  const path = document.getElementById('githubPath').value.trim();
+  const message = document.getElementById('githubMessage').value.trim();
+  const encryptedContent = document.getElementById('jsonEncriptado').value;
+
+  // Validar campos
+  if (!token || !owner || !repo || !path || !message) {
+    mostrarEstadoGitHub('Por favor, completa todos los campos', 'error');
+    return;
+  }
+
+  if (!encryptedContent) {
+    mostrarEstadoGitHub('Primero genera el JSON encriptado', 'error');
+    return;
+  }
+
+  mostrarEstadoGitHub('Subiendo a GitHub...', 'pending');
+
+  try {
+    // Primero, intentamos obtener el SHA del archivo existente (si existe)
+    let sha = null;
+    try {
+      const response = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `token ${token}`,
+          'User-Agent': 'Gestor-Usuarios-App'
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        sha = data.sha;
+      }
+    } catch (e) {
+      // El archivo probablemente no existe, continuamos sin SHA
+      console.log('Archivo no existente, se creará uno nuevo');
+    }
+
+    // Codificar contenido en base64
+    const content = btoa(encryptedContent);
+
+    // Configurar la solicitud para crear/actualizar el archivo
+    const response = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `token ${token}`,
+        'Content-Type': 'application/json',
+        'User-Agent': 'Gestor-Usuarios-App'
+      },
+      body: JSON.stringify({
+        message: message,
+        content: content,
+        sha: sha
+      })
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      mostrarEstadoGitHub('¡Archivo subido correctamente a GitHub!', 'success');
+      console.log('Archivo subido:', data);
+    } else {
+      const error = await response.json();
+      mostrarEstadoGitHub(`Error: ${error.message}`, 'error');
+      console.error('Error al subir:', error);
+    }
+  } catch (error) {
+    mostrarEstadoGitHub(`Error de conexión: ${error.message}`, 'error');
+    console.error('Error:', error);
+  }
+}
+
+function mostrarEstadoGitHub(mensaje, tipo) {
+  const statusElement = document.getElementById('githubStatus');
+  let iconClass = '';
+  let statusText = '';
+
+  switch (tipo) {
+    case 'success':
+      iconClass = 'status-success';
+      statusText = '<span class="status-indicator status-success"></span> ' + mensaje;
+      statusElement.style.color = '#6cc644';
+      break;
+    case 'error':
+      iconClass = 'status-error';
+      statusText = '<span class="status-indicator status-error"></span> ' + mensaje;
+      statusElement.style.color = '#bd2c00';
+      break;
+    case 'pending':
+      iconClass = 'status-pending';
+      statusText = '<span class="status-indicator status-pending"></span> ' + mensaje;
+      statusElement.style.color = '#dbab09';
+      break;
+  }
+
+  statusElement.innerHTML = statusText;
+}
+
+document.getElementById('form').addEventListener('submit', agregarOActualizarUsuario);
+document.getElementById('btnDesencriptar').addEventListener('click', desencriptar);
+document.getElementById('clearForm').addEventListener('click', limpiarFormulario);
+
+// 🔧 NUEVO: Actualiza automáticamente el JSON al modificar la clave
+document.getElementById('clave').addEventListener('input', actualizarJSON);
+
+renderTabla();
+</script>
+
+</body>
+</html>
