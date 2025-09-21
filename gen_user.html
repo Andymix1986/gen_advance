@@ -135,6 +135,18 @@
       margin-top: 5px;
       text-align: center;
     }
+
+    .url-input {
+      font-size: 0.9rem;
+      padding: 8px;
+    }
+
+    .section-title {
+      color: #00bfff;
+      border-bottom: 1px solid #333;
+      padding-bottom: 5px;
+      margin-top: 25px;
+    }
   </style>
 </head>
 <body>
@@ -196,24 +208,27 @@
   <div id="githubStatus"></div>
 </div>
 
-<h3>JSON sin encriptar:</h3>
+<h3 class="section-title">JSON sin encriptar:</h3>
 <textarea id="jsonSinEncriptar" readonly></textarea>
 
-<h3>JSON encriptado (Base64):</h3>
+<h3 class="section-title">JSON encriptado (Base64):</h3>
 <textarea id="jsonEncriptado" readonly></textarea>
 <button onclick="copiarJSON()">📋 Copiar JSON encriptado</button>
 
-<h3>Desencriptar JSON:</h3>
-<textarea id="jsonParaDesencriptar" placeholder="Pega aquí el JSON encriptado en Base64"></textarea>
+<h3 class="section-title">Desencriptar desde GitHub:</h3>
+<label>URL del archivo JSON en GitHub (raw):
+  <input type="text" id="jsonUrl" placeholder="https://raw.githubusercontent.com/usuario/repo/rama/archivo.json" class="url-input" />
+</label>
+
 <label>Clave para desencriptar:
   <input type="text" id="claveDesencriptar" />
 </label>
-<button id="btnDesencriptar">Desencriptar</button>
+<button id="btnDesencriptar" onclick="desencriptarDesdeUrl()">Desencriptar desde URL</button>
 
-<h3>Resultado de desencriptación:</h3>
+<h3 class="section-title">Resultado de desencriptación:</h3>
 <textarea id="resultadoDesencriptado" readonly></textarea>
 
-<h3>Usuarios:</h3>
+<h3 class="section-title">Usuarios:</h3>
 <table id="tablaUsuarios">
   <thead>
     <tr><th>Usuario</th><th>Contraseña</th><th>Fecha Expiración</th><th>Acciones</th></tr>
@@ -352,15 +367,28 @@ function renovarUsuario(i) {
   }
 }
 
-function desencriptar() {
-  const base64 = document.getElementById('jsonParaDesencriptar').value.trim();
+// Nueva función para desencriptar desde URL
+async function desencriptarDesdeUrl() {
+  const url = document.getElementById('jsonUrl').value.trim();
   const clave = document.getElementById('claveDesencriptar').value;
-  if (!base64 || !clave) {
-    alert('Ingresa el JSON y clave');
+  
+  if (!url || !clave) {
+    alert('Ingresa la URL y la clave de desencriptación');
     return;
   }
 
   try {
+    mostrarEstadoGitHub('Descargando datos desde GitHub...', 'pending');
+    
+    // Descargar el contenido desde la URL
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`Error al descargar: ${response.status} ${response.statusText}`);
+    }
+    
+    const base64 = await response.text();
+    
+    // Desencriptar el contenido
     const claveBytes = claveABytes(clave);
     const encryptedBytes = base64ToBytes(base64);
     const decryptedBytes = xorEncrypt(encryptedBytes, claveBytes);
@@ -369,15 +397,16 @@ function desencriptar() {
     const obj = JSON.parse(jsonStr);
     document.getElementById('resultadoDesencriptado').value = JSON.stringify(obj, null, 2);
 
-    // ✅ NUEVO: Cargar en la tabla y actualizar variable
+    // Cargar en la tabla y actualizar variable
     usuarios = obj;
     renderTabla();
-
+    
+    mostrarEstadoGitHub('Datos desencriptados y cargados correctamente', 'success');
   } catch (err) {
-    alert('Error al desencriptar o JSON inválido');
+    mostrarEstadoGitHub('Error al desencriptar: ' + err.message, 'error');
+    console.error('Error:', err);
   }
 }
-
 
 function copiarJSON() {
   const text = document.getElementById('jsonEncriptado').value;
@@ -462,6 +491,10 @@ async function subirAGithub() {
       const data = await response.json();
       mostrarEstadoGitHub('¡Archivo subido correctamente a GitHub!', 'success');
       console.log('Archivo subido:', data);
+      
+      // Actualizar la URL del archivo en el campo correspondiente
+      const rawUrl = `https://raw.githubusercontent.com/${owner}/${repo}/main/${path}`;
+      document.getElementById('jsonUrl').value = rawUrl;
     } else {
       const error = await response.json();
       mostrarEstadoGitHub(`Error: ${error.message}`, 'error');
@@ -500,10 +533,9 @@ function mostrarEstadoGitHub(mensaje, tipo) {
 }
 
 document.getElementById('form').addEventListener('submit', agregarOActualizarUsuario);
-document.getElementById('btnDesencriptar').addEventListener('click', desencriptar);
 document.getElementById('clearForm').addEventListener('click', limpiarFormulario);
 
-// 🔧 NUEVO: Actualiza automáticamente el JSON al modificar la clave
+// Actualiza automáticamente el JSON al modificar la clave
 document.getElementById('clave').addEventListener('input', actualizarJSON);
 
 renderTabla();
